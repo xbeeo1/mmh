@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="lot_view_picking_form_inherit" model="ir.ui.view">
+            <field name="name">stock.picking.form.inherit.lot</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='move_ids']/list//field[@name='product_uom_qty']" position="before">
+                    <field name="lot_id" readonly="picking_code != 'internal'" optional="show" options="{'no_quick_create': True, 'no_create_edit': True,'no_open': True, 'no_create': True}"/>
+
+                </xpath>
+
+
+            </field>
+        </record>
+
+
+    </data>
+</odoo>
