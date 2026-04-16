@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_reception_shift_history_tree" model="ir.ui.view">
+            <field name="name">reception.shift.history.tree</field>
+            <field name="model">reception.shift.history</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="user_id"/>
+                    <field name="date"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Form view -->
+        <record id="view_reception_shift_history_form" model="ir.ui.view">
+            <field name="name">reception.shift.history.form</field>
+            <field name="model">reception.shift.history</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+
+                        <group>
+                            <group>
+                                <field name="user_id"/>
+
+                            </group>
+                            <group>
+                                <field name="date"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Shift History" name="fee_history">
+                                <field name="shift_history_line" widget="section_and_note_one2many" delete="false">
+                                    <list string="Shift History" editable="bottom" delete="false">
+                                        <field name="datetime_from" readonly="0"/>
+                                        <field name="datetime_to" readonly="0"/>
+                                        <field name="receptionist_id" readonly="0"/>
+                                        <field name="is_readonly" column_invisible="True"/>
+                                        <field name="opening_balance" force_save="1" readonly="is_readonly"/>
+                                        <field name="closing_balance" force_save="1" readonly="is_readonly"/>
+                                    </list>
+                                </field>
+                            </page>
+
+                        </notebook>
+
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="view_reception_shift_history_search" model="ir.ui.view">
+            <field name="name">reception.shift.history.search</field>
+            <field name="model">reception.shift.history</field>
+            <field name="arch" type="xml">
+                <search string="Search Doctor">
+                    <field name="user_id"/>
+                    <separator/>
+                    <filter string="Doctor" name="user_id" domain="[('user_id', '!=', False)]"/>
+                    <group>
+                        <filter string="User" name='user_id' context="{'group_by':'user_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="action_reception_shift_history" model="ir.actions.act_window">
+            <field name="name">Reception Shift History</field>
+            <field name="res_model">reception.shift.history</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create Your First Shift History...!
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_medical_reception"
+                  name="Operations"
+                  parent="basic_hms.main_menu_hospital_management"
+                  sequence="5"/>
+
+        <menuitem id="menu_shift_assign"
+                  name="Reception Shift Assign"
+                  parent="xbo_mmh_custom.menu_medical_reception"
+                  action="action_reception_shift_history"
+                  sequence="1"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,26 @@
+# -*- coding: utf-8 -*-
+
+from . import medical_patient
+from . import patient_village
+from . import patient_type
+from . import res_partner
+from . import doctor_fees_rate
+from . import reception_shift_history
+from . import draft_lab_request
+from . import lab_test_result
+from . import prescription_order
+from . import treatment_type
+from . import hr_department
+from . import product_template
+from . import product_product
+from . import account_move
+from . import pos_order_line
+from . import account_asset
+from . import medical_room
+from . import hr_employee
+from . import stock_lot
+from . import stock_move
+from . import pos_order
+from . import partner_lab
+from . import outsourced_lab_request
+from . import purchase_order

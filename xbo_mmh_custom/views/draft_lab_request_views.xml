@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="medical_patient_lab_test_form_view_inherit" model="ir.ui.view">
+        <field name="name">medical.patient.lab.test.form</field>
+        <field name="model">medical.patient.lab.test</field>
+        <field name="inherit_id" ref="basic_hms.medical_patient_lab_test_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='patient_id']" position="before">
+                <field name="patient_id_name" placeholder="Patient ID"/>
+            </xpath>
+            <xpath expr="//field[@name='medical_test_type_id']" position="attributes">
+                <attribute name="required">0</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='medical_test_type_id']" position="replace">
+            </xpath>
+
+            <xpath expr="//field[@name='invoice_to_insurer']" position="replace">
+                <field name="outsourced_lab_request" />
+                <field name="partner_lab_id"  invisible ="outsourced_lab_request !=  True" required="outsourced_lab_request == True"/>
+            </xpath>
+
+
+
+            <xpath expr="//form/sheet/group" position="after">
+                <notebook>
+                        <page string="Lab Test Line" >
+                            <field name="lab_test_lines">
+                                <list string="Lab Test Line" editable="bottom">
+                                    <field name="medical_test_type_id" />
+
+                                </list>
+                            </field>
+
+                        </page>
+
+                    </notebook>
+
+            </xpath>
+
+
+
+        </field>
+    </record>
+
+
+
+</odoo>

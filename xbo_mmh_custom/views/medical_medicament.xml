@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <menuitem name="Medicament"
+            id="main_menu_conf_medicament"
+            parent = "basic_hms.main_menu_configartion"
+            sequence='0'
+           />
+    <menuitem name="Medicament"
+                id="menu_medicament"
+                parent="main_menu_conf_medicament"
+                action="basic_hms.action_medical_medicament" />
+
+
+</odoo>

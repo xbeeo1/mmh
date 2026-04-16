@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="paperformat_patient_card_report" model="report.paperformat">
+        <field name="name">US Letter</field>
+        <field name="default" eval="True"/>
+        <field name="format">Letter</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">32</field>
+        <field name="margin_bottom">0</field>
+        <field name="margin_left">0</field>
+        <field name="margin_right">0</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">40</field>
+        <field name="dpi">90</field>
+        <field name="css_margins" eval="True"/>
+    </record>
+
+    <record id="basic_hms.report_print_patient_card" model="ir.actions.report">
+        <field name="paperformat_id" ref="xbo_mmh_custom.paperformat_patient_card_report"/>
+    </record>
+
+
+    <record id="action_pdf_sale_summary_report" model="ir.actions.report">
+        <field name="name">Sale Summary Report</field>
+        <field name="model">sale.summary.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">xbo_mmh_custom.sale_summary_template</field>
+        <field name="report_file">xbo_mmh_custom.sale_summary_template</field>
+        <field name="print_report_name">'Sale Summary Report'</field>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_xlsx_sale_summary_report" model="ir.actions.report">
+        <field name="name">Sale Summary Report</field>
+        <field name="model">sale.summary.report</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">xbo_mmh_custom.sale_summary_xlsx_report</field>
+        <field name="report_file">xbo_mmh_custom.sale_summary_xlsx_report</field>
+        <field name="print_report_name">'Sale Summary Report'</field>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

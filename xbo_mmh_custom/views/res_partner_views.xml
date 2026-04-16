@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_partner_form_inherit" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+
+<!--            <xpath expr="//field[@name='mobile']" position="attributes">-->
+<!--                <attribute name="required">1</attribute>-->
+<!--            </xpath>-->
+            <xpath expr="//field[@name='street']" position="attributes">
+                <attribute name="required">0</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='country_id']" position="after">
+                <field name="patient_cnic" placeholder="CNIC"/>
+            </xpath>
+            <xpath expr="//field[@name='city']" position="before">
+                <field name="village_id" placeholder="Village" required="1"/>
+            </xpath>
+
+            <xpath expr="//field[@name='function']" position="after">
+                <field name="father_name"/>
+                <field name="patient_type_id" required="1"/>
+                <field name="department_id"/>
+                <field name="treatment_type_id" required="1"/>
+                <field name="primary_care_physician_id"/>
+            </xpath>
+
+            <xpath expr="//notebook/page[last()]" position="after">
+                <page name="contact_info" string="Contact Info">
+                    <group>
+                        <group>
+                            <field name="sector_type" required="1"/>
+                            <field name="licence_number" invisible="sector_type == 'govt'" required="sector_type == 'private'"/>
+                            <field name="licence_validity_date" invisible="sector_type == 'govt'" required="sector_type == 'private'"/>
+                        </group>
+                        <group>
+                            <field name="licence_status" invisible="sector_type == 'govt'"/>
+                            <field name="is_renewal" invisible="licence_status  != 'expired'"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_res_partner_filter_inherit" model="ir.ui.view">
+        <field name="name">res.partner.search.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="department_id"/>
+                <field name="patient_type_id"/>
+                <field name="licence_number"/>
+            </xpath>
+
+            <xpath expr="//filter[@name='type_person']" position="after">
+                <filter string="Department" name="department_id" domain="[('department_id', '!=', False)]"/>
+                <filter string="Patient Type" name="patient_type_id" domain="[('patient_type_id', '!=', False)]"/>
+                 <filter string="Sector Type" name="sector_type" domain="[('sector_type', '!=', False)]"/>
+                <filter name="licence_status" string="Licence Status" domain="[('licence_status', '!=', False)]"/>
+            </xpath>
+
+            <xpath expr="//group/filter[@name='salesperson']" position="after">
+                <filter name="department_id" string="Department" domain="[]" context="{'group_by' : 'department_id'}"/>
+                <filter name="patient_type_id" string="Patient Type" domain="[]" context="{'group_by' : 'patient_type_id'}"/>
+                <filter name="sector_type" string="Sector Type" domain="[]" context="{'group_by' : 'sector_type'}"/>
+                <filter name="licence_status" string="Licence Status" domain="[]" context="{'group_by' : 'licence_status'}"/>
+            </xpath>
+
+        </field>
+    </record>
+
+
+</odoo>

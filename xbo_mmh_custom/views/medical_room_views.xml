@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_medical_room_tree" model="ir.ui.view">
+        <field name="name">medical.room.list</field>
+        <field name="model">medical.room</field>
+        <field name="arch" type="xml">
+            <list string="Rooms">
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_medical_room_form" model="ir.ui.view">
+        <field name="name">medical.room.form</field>
+        <field name="model">medical.room</field>
+        <field name="arch" type="xml">
+            <form string="Room">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_medical_room_search" model="ir.ui.view">
+        <field name="name">medical.room.search</field>
+        <field name="model">medical.room</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_medical_room_view" model="ir.actions.act_window">
+        <field name="name">Medical Rooms</field>
+        <field name="res_model">medical.room</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_medical_room_search"/>
+    </record>
+
+    <menuitem id="menu_medical_room_root"
+              name="Medical Rooms"
+              parent="account.menu_finance_configuration"
+              sequence="1000"/>
+
+    <menuitem id="menu_item_medical_room"
+              name="Rooms"
+              parent="menu_medical_room_root"
+              action="action_medical_room_view"
+              sequence="1"/>
+
+</odoo>
+

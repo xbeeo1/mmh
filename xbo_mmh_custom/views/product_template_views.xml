@@ -1,0 +1,33 @@
+<odoo>
+    <data>
+
+
+        <record id="product_template_only_form_view_inherit" model="ir.ui.view">
+            <field name="name">product.template.only.form.inherit.emc</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet" position="before">
+                    <button name="action_update_medicament"
+                            string="Update Medicament"
+                            type="object"
+                            class="btn-primary"/>
+                </xpath>
+                <xpath expr="//notebook/page[last()]" position="after">
+                    <page name="custom_fields" string="Custom Fields">
+                        <group>
+                            <group>
+                                <field name="is_checkup_fees" invisible="0"/>
+                                <field name="analytic_account_id" />
+                            </group>
+                            <group>
+                                 <field name="create_mrp_order" />
+                                <field name="done_mrp_order" />
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

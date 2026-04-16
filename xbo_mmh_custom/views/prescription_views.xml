@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="medical_prescription_order_tree_view_inherit" model="ir.ui.view">
+        <field name="name">medical.prescription.order.tree</field>
+        <field name="model">medical.prescription.order</field>
+        <field name="inherit_id" ref="basic_hms.medical_prescription_order_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='doctor_id']" position="after">
+                <field name="amount_invoice" sum="Total"/>
+            </xpath>
+            <xpath expr="//field[@name='patient_id']" position="after">
+                <field name="patient_type_id"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="medical_prescription_order_form_view_inherit" model="ir.ui.view">
+        <field name="name">medical.prescription.order.form</field>
+        <field name="model">medical.prescription.order</field>
+        <field name="inherit_id" ref="basic_hms.medical_prescription_order_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='pharmacy_partner_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='doctor_id']" position="after">
+                <field name="amount_invoice" invisible="1"/>
+                <field name="patient_id_name" invisible="1"/>
+                <field name="department_id" invisible="0" readonly="1"/>
+                <field name="treatment_fees" force_save="1" invisible="0" readonly="1"/>
+            </xpath>
+            <xpath expr="//field[@name='patient_id']" position="after">
+                <field name="patient_type_id" readonly="1"/>
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <div class="oe_button_box" name="button_box">
+                    <button name="action_view_invoices" type="object" class="oe_stat_button"
+                                icon="fa-list">
+                            <field name="invoice_count" widget="statinfo" string="Invoice"/>
+                        </button>
+                </div>
+            </xpath>
+
+            <xpath expr="//button[@name='%(basic_hms.action_create_prescription_invoice1)d']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='%(basic_hms.action_create_prescription_invoice1)d']" position="after">
+                <button name="action_create_prescription_invoice" invisible="invoice_count > 0" type="object" string="Create Invoice" class="btn-primary" data-hotkey="q"/>
+            </xpath>
+
+
+
+             <xpath expr="//header" position="inside">
+                <button name="action_print_patient_card"
+                        type="object"
+                        string="Print Patient Card"
+                        class="btn-primary"/>
+            </xpath>
+
+
+        </field>
+    </record>
+
+
+    <record id="medical_prescription_order_search_view_inherit" model="ir.ui.view">
+    <field name="name">medical.prescription.order.search</field>
+        <field name="model">medical.prescription.order</field>
+        <field name="inherit_id" ref="basic_hms.medical_prescription_order_search_view"/>
+        <field name="arch" type="xml">
+             <xpath expr="//field[@name='pharmacy_partner_id']" position="before">
+                <field name="user_id"/>
+                <field name="doctor_id"/>
+                <field name="patient_type_id"/>
+                 <separator/>
+                <filter string="Login User" name="user_id" domain="[('user_id', '!=', False)]"/>
+                <filter string="Patient" name="patient_id" domain="[('patient_id', '!=', False)]"/>
+                <filter string="Patient Type" name="patient_type_id" domain="[('patient_type_id', '!=', False)]"/>
+                <filter string="Prescription Date" name="prescription_date" domain="[('prescription_date', '!=', False)]"/>
+                <filter string="Prescribing Doctor" name="doctor_id" domain="[('doctor_id', '!=', False)]"/>
+                <group >
+                    <filter string="Login User" name='user_id' context="{'group_by':'user_id'}"/>
+                    <filter string="Patient" name='patient_id' context="{'group_by':'patient_id'}"/>
+                    <filter string="Patient Type" name='patient_type_id' context="{'group_by':'patient_type_id'}"/>
+                    <filter string="Prescription Date" name='prescription_date' context="{'group_by':'prescription_date'}"/>
+                    <filter string="Prescribing Doctor" name='doctor_id' context="{'group_by':'doctor_id'}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="pre_report_print_patient_card" model="ir.actions.report">
+        <field name="name">Patient Card</field>
+        <field name="model">medical.patient</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">basic_hms.report_patient_card</field>
+        <field name="report_file">basic_hms.report_patient_card</field>
+        <field name="binding_type">report</field>
+    </record>
+
+
+
+
+</odoo>

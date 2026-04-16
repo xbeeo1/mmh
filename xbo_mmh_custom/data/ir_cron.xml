@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+       <!-- CRON JOB :  SEND NOTIFICATION FORT EXPIRY PRODUCT-->
+        <record id="ir_cron_notification_expiry_product" model="ir.cron">
+            <field name="name">Notification Expiry Product</field>
+            <field name="model_id" ref="stock.model_stock_lot"/>
+            <field name="state">code</field>
+            <field name="code">model._action_product_expiry_notification()</field>
+            <field name="active" eval="True"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+        </record>
+
+        <!-- CRON JOB : SEND NOTIFICATION IF CONTACT LICENCE EXPIRED-->
+        <record id="ir_cron_contact_expire_licence" model="ir.cron">
+            <field name="name">Notification Expire Licence</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="state">code</field>
+            <field name="code">model._licence_validity_notification()</field>
+            <field name="active" eval="True"/>
+            <field name="interval_number">7</field>
+            <field name="interval_type">days</field>
+        </record>
+
+        <!-- SET LICENCE STATUS EXPIRED IF EXPIRY DATE IS TODAY-->
+        <record id="ir_cron_contact_set_expire_licence" model="ir.cron">
+            <field name="name">Auto Expire Licence Status</field>
+            <field name="model_id" ref="account.model_res_partner"/>
+            <field name="state">code</field>
+            <field name="code">model._licence_status_expire()</field>
+            <field name="active" eval="True"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+        </record>
+
+    </data>
+</odoo>

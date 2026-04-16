@@ -1,0 +1,63 @@
+# -*- coding: utf-8 -*-
+{
+    "name": "Xbo MMH Custom",
+
+    'version': '19.0.0.0',
+
+    'summary': """Xbo MMH Custom""",
+
+    'description': """Xbo MMH Custom""",
+
+    'category': 'hms',
+
+    'author': "xbeeo",
+
+    'website': 'https://xbeeo.com',
+
+    "depends": ['base', 'basic_hms', 'contacts', 'hr', 'account', 'point_of_sale', 'report_xlsx', 'om_account_asset' ,'stock','mrp','purchase'],
+
+    "data": [
+        'security/ir.model.access.csv',
+        'data/ir_sequence_data.xml',
+        'views/medical_patient_views.xml',
+        'views/patient_village_views.xml',
+        'views/patient_type_views.xml',
+        'views/res_partner_views.xml',
+        # 'views/doctor_fees_rate_views.xml',
+        'views/reception_shift_history_views.xml',
+        'views/draft_lab_request_views.xml',
+        'views/lab_test_result_views.xml',
+        'views/prescription_views.xml',
+        'views/treatment_type_views.xml',
+        'views/hr_department_views.xml',
+        'views/product_template_views.xml',
+        'views/product_product_views.xml',
+        'views/account_move_views.xml',
+        'views/pos_order_product_views.xml',
+        'views/account_asset_views.xml',
+        'views/medical_room_views.xml',
+        'views/medical_medicament.xml',
+        'views/hr_employee_views.xml',
+        'views/pos_order_views.xml',
+        'views/partner_lab_views.xml',
+        'views/outsourced_lab_request_views.xml',
+        'views/purchase_order_views.xml',
+        'data/ir_cron.xml',
+        'views/stock_lot_views.xml',
+        'views/stock_move_views.xml',
+        'views/stock_picking_views.xml',
+        'wizard/bulk_create_invoice.xml',
+        'report/pdf/patient_card_report_template.xml',
+        'report/pdf/lab_test_report_template.xml',
+        'report/sale/sales_summary_report_wizard_view.xml',
+        'report/sale/action_report.xml',
+        'report/sale/sale_summary_report_template.xml',
+        # 'report/pos/action_report.xml',
+        # 'report/pos/pos_profit_loss_wizard_views.xml',
+        # 'report/pos/pos_profit_loss_report_template.xml',
+    ],
+
+    'license': 'LGPL-3',
+    'installable': True,
+    'auto_install': False,
+}

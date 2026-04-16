@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="medical_lab_tree_view_inherit" model="ir.ui.view">
+        <field name="name">medical.lab.tree</field>
+        <field name="model">medical.lab</field>
+        <field name="inherit_id" ref="basic_hms.medical_lab_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date_analysis']" position="after">
+                <field name="amount_invoice"/>
+            </xpath>
+            <xpath expr="//field[@name='patient_id']" position="after">
+                <field name="patient_type_id" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//field[@name='date_analysis']" position="replace">
+                <field name="date_requested" />
+            </xpath>
+
+        </field>
+    </record>
+
+
+    <record id="medical_lab_form_view_inherit" model="ir.ui.view">
+        <field name="name">medical.lab.form</field>
+        <field name="model">medical.lab</field>
+        <field name="inherit_id" ref="basic_hms.medical_lab_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date_analysis']" position="after">
+                <field name="amount_invoice" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='patient_id']" position="after">
+                <field name="patient_type_id" invisible="0"/>
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <div class="oe_button_box" name="button_box">
+                    <button name="action_view_invoices" type="object" class="oe_stat_button"
+                                icon="fa-list">
+                            <field name="invoice_count" widget="statinfo" string="Invoice"/>
+                        </button>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="medical_lab_form_view_search" model="ir.ui.view">
+    <field name="name">medical.lab.search</field>
+    <field name="model">medical.lab</field>
+        <field name="arch" type="xml">
+            <search string="Search Patient">
+                <field name="test_id"/>
+                <field name="patient_id"/>
+                <field name="patient_type_id"/>
+                <field name="patient_mobile"/>
+                <field name="patient_cnic"/>
+                <field name="mr_number"/>
+                <field name="date_analysis"/>
+                <separator/>
+                <filter string="Test Type" name="test_id" domain="[('test_id', '!=', False)]"/>
+                <filter string="Patient" name="patient_id" domain="[('patient_id', '!=', False)]"/>
+                <filter string="Patient Type" name="patient_type_id" domain="[('patient_type_id', '!=', False)]"/>
+                <filter string="Date Analysis" name="date_analysis" domain="[('date_analysis', '!=', False)]"/>
+                <group>
+                    <filter string="Test Type" name='test_id' context="{'group_by':'test_id'}"/>
+                    <filter string="Patient" name='patient_id' context="{'group_by':'patient_id'}"/>
+                    <filter string="Patient Type" name='patient_type_id' context="{'group_by':'patient_type_id'}"/>
+                    <filter string="Date Analysis" name='date_analysis' context="{'group_by':'date_analysis'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+
+
+</odoo>

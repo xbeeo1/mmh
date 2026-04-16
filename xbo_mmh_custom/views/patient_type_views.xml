@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_patient_type_tree" model="ir.ui.view">
+            <field name="name">patient.type.tree</field>
+            <field name="model">patient.type</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="description"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Form view -->
+        <record id="view_patient_type_form" model="ir.ui.view">
+            <field name="name">patient.type.form</field>
+            <field name="model">patient.type</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="description"/>
+                            </group>
+                            <group>
+                                <field name="code"/>
+                            </group>
+                        </group>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_patient_type" model="ir.actions.act_window">
+            <field name="name">Patient Type</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">patient.type</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create Your First Patient type...!
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_patient_type"
+                  name="Patient Type"
+                  parent="basic_hms.main_menu_configartion"
+                  action="action_patient_type"
+                  sequence="13"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_pos_order_line_list" model="ir.ui.view">
+            <field name="name">pos.order.line.list</field>
+            <field name="model">pos.order.line</field>
+            <field name="arch" type="xml">
+                <list string="POS Order lines" create="0" edit="0">
+                    <field name="order_id"/>
+                    <field name="session_id"/>
+                    <field name="user_id"/>
+                    <field name="partner_id"/>
+                    <field name="product_id" readonly="1"/>
+                    <field name="qty" readonly="1" sum="Total qty"/>
+                    <field name="discount" readonly="1" optional="hide"/>
+                    <field name="cost_price" readonly="1" widget="monetary"/>
+                    <field name="price_unit" readonly="1" widget="monetary"/>
+                    <field name="price_subtotal" readonly="1" sum="Sum of subtotals" widget="monetary"/>
+                    <field name="price_subtotal_incl" readonly="1" sum="Sum of subtotals" widget="monetary"/>
+                    <field name="create_date" readonly="1"/>
+                    <field name="currency_id" column_invisible="True"/>
+                </list>
+            </field>
+        </record>
+
+
+        <record id="view_pos_order_line_search" model="ir.ui.view">
+            <field name="name">pos.order.line.search</field>
+            <field name="model">pos.order.line</field>
+            <field name="arch" type="xml">
+                <search string="POS Order lines Search">
+                    <field name="order_id"/>
+                    <field name="product_id"/>
+                    <field name="user_id"/>
+                    <field name="partner_id"/>
+                    <field name="create_date"/>
+                    <field name="qty"/>
+                    <field name="price_unit"/>
+                    <field name="price_subtotal"/>
+                    <field name="price_subtotal_incl"/>
+
+                    <filter string="Pos Order" name="order_id" domain="[('order_id', '!=', False)]"/>
+                    <filter string="Session" name="session_id" domain="[('session_id', '!=', False)]"/>
+                    <filter string="Product" name="product_id" domain="[('product_id', '!=', False)]"/>
+                    <filter string="Cashier" name="user_id" domain="[('user_id', '!=', False)]"/>
+                    <filter string="Customer" name="partner_id" domain="[('partner_id', '!=', False)]"/>
+                    <filter string="Created On" name="create_date" domain="[('create_date', '!=', False)]"/>
+
+                    <group colspan="16">
+                        <filter string="Pos Order" name="order_id" context="{'group_by':'order_id'}"/>
+                        <filter string="Session" name="session_id" context="{'group_by':'session_id'}"/>
+                        <filter string="Product" name="product_id" context="{'group_by':'product_id'}"/>
+                        <filter string="Cashier" name="user_id" context="{'group_by':'user_id'}"/>
+                        <filter string="Customer" name="partner_id" context="{'group_by':'partner_id'}"/>
+                        <filter string="Created On" name="create_date" context="{'group_by':'create_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="action_pos_order_line_list" model="ir.actions.act_window">
+            <field name="name">Pos Sale Products</field>
+            <field name="res_model">pos.order.line</field>
+            <field name="view_mode">list</field>
+            <field name="view_id" ref="view_pos_order_line_list"/>
+        </record>
+
+        <menuitem id="menu_pos_order_product"
+                  name="Pos Order Products"
+                  parent="point_of_sale.menu_point_of_sale"
+                  action="action_pos_order_line_list"
+                  sequence="3"/>
+
+
+    </data>
+</odoo>

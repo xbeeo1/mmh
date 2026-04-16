@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_department_form_inherit" model="ir.ui.view">
+        <field name="name">hr.department.form.inherit</field>
+        <field name="model">hr.department</field>
+        <field name="inherit_id" ref="hr.view_department_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/group[last()]" position="after">
+                <notebook>
+                    <page string="Treatment Type Rate Line" name="treatment_rate_line">
+                        <field name="treatment_rate_line" widget="section_and_note_one2many">
+                            <list string="" editable="bottom">
+                                <field name="department_id" column_invisible="True"/>
+                                <field name="doctor_id" domain="[('is_doctor', '=', True)]"/>
+                                <field name="treatment_type_id"/>
+                                <field name="treatment_fees"/>
+                            </list>
+                        </field>
+                    </page>
+                </notebook>
+            </xpath>
+
+        </field>
+    </record>
+
+
+</odoo>

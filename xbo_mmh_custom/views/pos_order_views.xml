@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_pos_order_tree_inherit" model="ir.ui.view">
+        <field name="name">pos.order.form.inherit</field>
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_order_tree"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="primary_care_physician_id"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="view_pos_pos_form_inherit" model="ir.ui.view">
+        <field name="name">pos.order.form.inherit</field>
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="primary_care_physician_id"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="view_pos_order_filter_inherit" model="ir.ui.view">
+        <field name="name">pos.order.search.inherit</field>
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_order_filter"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="primary_care_physician_id"/>
+            </xpath>
+
+            <xpath expr="//filter[@name='invoiced']" position="after">
+                <filter string="Primary Care Doctor" name="primary_care_physician_id" domain="[('primary_care_physician_id', '!=', False)]"/>
+            </xpath>
+
+            <xpath expr="//group/filter[@name='session']" position="after">
+                <filter name="primary_care_physician_id" string="Primary Care Doctor" domain="[]" context="{'group_by' : 'primary_care_physician_id'}"/>
+            </xpath>
+
+        </field>
+    </record>
+
+
+</odoo>
