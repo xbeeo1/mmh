@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Extend the POS OrderReceipt template to add a custom_footer -->
+<templates xml:space="preserve">
+  <t t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension" t-name="xbo_mmh_custom_pos_receipt.OrderReceiptInherit">
+    <xpath expr="//div[@class='after-footer']" position="before">
+
+        <br/>
+        <div t-if="order.config.receipt_custom_footer" t-ref="custom_footer_area"  style="text-align: left;">
+<!--            <t t-esc="order.config.receipt_custom_footer" />-->
+        </div>
+        <br/>
+    </xpath>
+  </t>
+</templates>

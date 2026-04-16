@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Extend the POS ReceiptHeader template to add a some fields-->
+<templates xml:space="preserve">
+  <t t-inherit="point_of_sale.ReceiptHeader" t-inherit-mode="extension" t-name="xbo_mmh_custom_pos_receipt.ReceiptHeaderInherit">
+    <xpath expr="//div[@class='cashier']" position="before">
+        <t t-if="order.partner_id">
+            <div t-if="order.partner_id.name" >
+                <div>Customer: <t t-esc="order.partner_id.name" /></div>
+            </div>
+            <div t-if="order.partner_id.phone" >
+                <div>Contact: <t t-esc="order.partner_id.phone" /></div>
+            </div>
+            <div t-if="order.partner_id.patient_type_id" >
+                <div>Type: <t t-esc="order.partner_id.patient_type_id.name" /></div>
+            </div>
+        </t>
+    </xpath>
+  </t>
+</templates>
