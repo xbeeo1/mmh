@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_multidays_profit_loss_wizard_user,multidays.profit.loss.wizard.user,model_multidays_profit_loss_wizard,base.group_user,1,1,1,1
+access_pos_profit_loss_wizard,pos.profit.loss.wizard,model_pos_profit_loss_wizard,base.group_user,1,1,1,1
