@@ -109,7 +109,7 @@ class MedicalPatientInherit(models.Model):
     """COUNT ALL RELATED PRESCRIPTIONS"""
     def _invoices_total(self):
         for rec in self:
-            invoice_count = self.env['account.move'].search_count([('ref', '=', rec.name)])
+            invoice_count = self.env['account.move'].search_count([('partner_id', '=', rec.patient_id.id)])
             rec.invoice_count = invoice_count
 
 
@@ -121,7 +121,7 @@ class MedicalPatientInherit(models.Model):
             "res_model": "account.move",
             "name": _("Invoice"),
             'view_mode': 'list,form',
-            'domain': [('ref', '=', self.name)],
+            'domain': [('partner_id', '=', self.patient_id.id)],
         }
         return result
 

@@ -3,7 +3,7 @@ from odoo.exceptions import ValidationError
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 from odoo.osv import expression
-
+import re
 
 
 class ResPartnerInherit(models.Model):
@@ -13,7 +13,7 @@ class ResPartnerInherit(models.Model):
     patient_type_id = fields.Many2one("patient.type", string="Contact/Patient Type")
     department_id = fields.Many2one("hr.department", string="Department")
     village_id = fields.Many2one("patient.village", string="Village")
-    patient_cnic = fields.Char(string="CNIC")
+    patient_cnic = fields.Char(string="CNIC", required=True)
     father_name = fields.Char(string="Father Name")
     sex = fields.Selection([('m', 'Male'), ('f', 'Female')], string="Sex")
     marital_status = fields.Selection([('s', 'Single'),
@@ -61,7 +61,13 @@ class ResPartnerInherit(models.Model):
 
         return super(ResPartnerInherit, self).create(vals)
 
-
+    @api.constrains('patient_cnic')
+    def _check_cnic(self):
+        for rec in self:
+            if rec.patient_cnic:
+                # CNIC format: 15 digits
+                if not re.fullmatch(r'\d{5}-\d{7}-\d', rec.patient_cnic):
+                    raise ValidationError("CNIC format should be xxxxx-xxxxxxx-x")
 
 
     def _licence_status_expire(self):

@@ -1,209 +1,197 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
+
+    <template id="custom_patient_external_layout_striped">
+        <div t-attf-class="o_company_#{company.id}_layout header" style="margin:0; padding:0;">
+            <div class="d-flex" style="margin:0; padding:0; align-items:flex-start;">
+                <div style="width:100%; margin:0; padding:0;">
+                    <img t-if="company.logo"
+                         t-att-src="image_data_uri(company.logo)"
+                         style="width:100%; height:170px; object-fit:contain; display:block; margin-top:-10px;"
+                         alt="Logo"/>
+                </div>
+            </div>
+        </div>
+        <div t-attf-class="o_company_#{company.id}_layout article o_report_layout_striped o_table_striped o_snail_mail {{'o_report_layout_background' if company.layout_background != 'Blank' else ''}}"
+             t-attf-style="background-image: url({{ 'data:image/png;base64,%s' % company.layout_background_image.decode('utf-8') if company.layout_background_image and company.layout_background == 'Custom' else
+                           '/base/static/img/demo_logo_report.png' if company.layout_background == 'Demo logo' else ''}});"
+             t-att-data-oe-model="o and o._name"
+             t-att-data-oe-id="o and o.id"
+             t-att-data-oe-lang="o and o.env.context.get('lang')">
+            <t t-call="web.address_layout"/>
+            <h2 t-out="layout_document_title"/>
+            <t t-out="0"/>
+        </div>
+
+    </template>
+
+    <template id="custom_patient_external_layout">
+        <t t-if="not o" t-set="o" t-value="doc"/>
+
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o and o.company_id.sudo()">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+
+        <t t-call="xbo_mmh_custom.custom_patient_external_layout_striped"><t t-out="0"/></t>
+
+    </template>
 
     <template id="report_patient_card_document_inherit" inherit_id="basic_hms.report_patient_card_document">
-                <xpath expr="." position="replace">
-                    <t t-call="web.html_container">
-                        <t t-call="web.basic_layout">
-
-                            <t t-set="company" t-value="res_company"/>
-                            <t t-set="partner" t-value="res_partner"/>
-                            <div class="header" style="">
-
-
-
-                                <table class="table table-borderless table-sm" style="table-layout: fixed; margin: 0;">
-                                <tr>
-                                    <td style="width: 17%">
-                                        <img t-if="company.logo" class="o_company_logo_big" t-att-src="image_data_uri(company.logo)" alt="Logo"/>
-                                        <div t-if="company.report_header" t-field="company.report_header" class="o_company_tagline fw-bold mt-2">Company tagline</div>
-                                    </td>
-                                    <td style="width: 83%;">
-                                        <br></br>
-                                        <span style="">
-                                            <h1 style="color:red; padding-top:3px; font-weight:bold">
-                                                <b><span style="color:red">MMH</span></b>
-<!--                                                <span style="color:#0A2472">WONHAR WELFARE HOSPITAL</span>-->
-                                             </h1>
-<!--                                            <h1 style="margin-top:-25px; padding-left:60px">-->
-<!--                                                <span style="font-size:16px">Jhamra Road Dharukna, Kallar Kahar, Chakwal, <span t-field='company.phone'/>, <span t-field='company.mobile'/></span>-->
-<!--                                            </h1>-->
-                                        </span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-
-
-                        <div class="page" style="font-size:15px">
+        <xpath expr="." position="replace">
+            <t t-call="web.html_container">
+                <t t-call="xbo_mmh_custom.custom_patient_external_layout">
+                    <t t-set="company" t-value="res_company"/>
+                    <t t-set="partner" t-value="res_partner"/>
+                    <div class="page" style="font-size:15px;margin-top:0px; padding-top:0px;" >
 <!--                            <center>-->
-                            <div>
-                                <b>Date:</b>
-                                <span style="font-size:16px;" t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d')"/>
-                                <span style="padding-left: 30px;">
-                                    <b>Time:</b>
-                                    <span style="font-size:16px;" t-esc="context_timestamp(datetime.datetime.now()).strftime('%H:%M:%S')"/>
-                                </span>
-                                <span style="padding-left: 30px;">
-                                    <b>Doctor Name:</b>
-                                    <span style="font-size:16px;" t-field='o.primary_care_physician_id.partner_id.name'/> <!-- Assuming doctor_name is a variable passed in context -->
-                                </span>
-                                <span style="padding-left: 65px;">
-                                    <b>Token No:</b>
-                                </span>
-                                 <!-- Assuming token_no is a variable passed in context -->
-                            </div>
+                        <div>
+                            <b>Date:</b>
+                            <span style="font-size:16px;" t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d')"/>
+                            <span style="padding-left: 30px;">
+                                <b>Time:</b>
+                                <span style="font-size:16px;" t-esc="context_timestamp(datetime.datetime.now()).strftime('%H:%M:%S')"/>
+                            </span>
+                            <span style="padding-left: 30px;">
+                                <b>Doctor Name:</b>
+                                <span style="font-size:16px;" t-field='o.primary_care_physician_id.partner_id.name'/> <!-- Assuming doctor_name is a variable passed in context -->
+                            </span>
+                            <span style="padding-left: 120px;">
+                                <b>Department:</b>
+                                <t t-if="o.primary_care_physician_id.partner_id.department_id">
+                                    <span style="font-size:16px;" t-field='o.primary_care_physician_id.partner_id.department_id.name'/>
+                                </t>
+                            </span>
+                             <!-- Assuming token_no is a variable passed in context -->
+                        </div>
 
 <!--                            </center>-->
 
-                            <table class="table borderless">
-                                <tr>
-                                    <td style="width:34%">
-                                        <div class="box"><b>Patient ID:</b>
-                                            <span t-field='o.name' /></div>
-                                    </td>
+                        <table class="table borderless">
+                            <tr>
+                                <td style="width:34%">
+                                    <div class="box"><b>Patient ID:</b>
+                                        <span t-field='o.name' /></div>
+                                </td>
 
-                                    <td style="width:33%">
-                                        <div class="box"><b>Name:</b>
-                                                    <span t-field='o.patient_id.name' /></div>
-                                    </td>
-                                    <td style="width:33%">
-                                        <div class="box"><b>Father Name:</b>
-                                                    <span t-field='o.patient_id.father_name' /></div>
-                                    </td>
-                                </tr>
+                                <td style="width:33%">
+                                    <div class="box"><b>Name:</b>
+                                                <span t-field='o.patient_id.name' /></div>
+                                </td>
+                                <td style="width:33%">
+                                    <div class="box"><b>CNIC:</b>
+                                                <span t-field='o.patient_id.patient_cnic' /></div>
+                                </td>
+                            </tr>
 
-                                <tr>
-                                    <td style="width:34%">
-                                        <div class="box"><b>Gender:</b>
-                                                    <span t-field='o.sex' /></div>
-                                    </td>
-                                     <td style="width:33%">
-                                        <div class="box"><b>Age:</b>
-                                                    <span t-field='o.age'/></div>
-                                    </td>
-                                    <td style="width:33%">
-                                        <div class="box">
-                                            <b>Patient Type :</b>
-                                            <t t-if="o.medical_patient_type_id.name != 'MMH'">
-                                                <span t-field='o.medical_patient_type_id.name'/>
-                                            </t>
-                                            <t t-else="">
-                                                <span></span>
-                                            </t>
-                                        </div>
-                                    </td>
-                                </tr>
-
-
-                                <tr>
-                                    <td style="width:33%">
-                                        <div class="box"><b>Phone:</b>
-                                                    <span t-field='o.patient_id.phone' />
-                                        </div>
-                                    </td>
-
-                                    <td style="width:34%">
-                                        <div class="box"><b>No of Visits:</b>
-                                                    </div>
-                                    </td>
-                                    <td style="width:34%">
-                                        <div class="box"><b>Address:</b>
-                                            <span t-field='o.village_id.name' />
-                                        </div>
-                                    </td>
-                                </tr>
-
-
-                            </table>
-                            <div style="font-size:16px;">
-                                <b>Symptoms:</b>
-                                <span style="border-bottom: 1px solid black; width: 59%; display: inline-block;"></span>
-                                <span style="padding-left: 10px;">
-                                    <b>Allergies:</b>
-                                </span>
-                                <span style="border-bottom: 1px solid black; width: 21%; display: inline-block;"></span>
-                            </div>
-                            <div style="font-size:16px;margin-top:30px;">
-                                <b>Diagnose:</b>
-                                <span style="border-bottom: 1px solid black; width: 85%; display: inline-block;"></span>
-                                <div style="text-align:right;margin-top:5px;">
-                                    <b style="font-size:20px;font-weight:bold;">VCO</b>
-                                </div>
-                            </div>
-                            <br></br>
-                            <div style="border: 0; border-top: 2px solid black; width: 100%;"></div>
-                            <div class="col-6">
-                                <div class="row">
-                                    <div class="col-4" style="margin-top:30px;" >
-                                        <span style="font-size:18px;font-weight:bold; text-decoration: underline;">Vitals:</span>
-                                        <div style="margin-top:7px;font-size:17px;">B.P:</div>
-                                        <div style="margin-top:7px;font-size:17px;">Temp:</div>
-                                        <div style="margin-top:7px;font-size:17px;">P.R:</div>
-                                        <div style="margin-top:7px;font-size:17px;">R.R:</div>
-                                        <div style="margin-top:7px;font-size:17px;">Weight:</div>
-                                        <div style="font-size:18px; padding-top: 30px; margin-top:30px;font-weight:bold;text-decoration: underline;" >Advised:</div>
-
+                            <tr>
+                                <td style="width:34%">
+                                    <div class="box"><b>Gender:</b>
+                                                <span t-field='o.sex' /></div>
+                                </td>
+                                 <td style="width:33%">
+                                    <div class="box"><b>Age:</b>
+                                                <span t-field='o.age'/></div>
+                                </td>
+                                <td style="width:33%">
+                                    <div class="box">
+                                        <b>Patient Type :</b>
+                                        <t t-if="o.medical_patient_type_id.name != 'MMH'">
+                                            <span t-field='o.medical_patient_type_id.name'/>
+                                        </t>
+                                        <t t-else="">
+                                            <span></span>
+                                        </t>
                                     </div>
-                                    <div class="col-1" style="border-left: 2px solid black; height: 600px;"/>
-                                    <div class="col-7" style="margin-top:20px;margin-left:-20px;">
-                                        <span style="font-size:30px;font-weight:bold;">Rx</span>
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td style="width:33%">
+                                    <div class="box"><b>Phone:</b>
+                                                <span t-field='o.patient_id.phone' />
                                     </div>
+                                </td>
+
+                                <td style="width:34%">
+                                    <div class="box"><b>Treatment Type:</b>
+                                        <span t-field='o.treatment_type_id.name' />
+                                    </div>
+                                </td>
+                                <td style="width:34%">
+                                    <div class="box"><b>Address:</b>
+                                        <span t-field='o.village_id.name' />
+                                    </div>
+                                </td>
+                            </tr>
+
+
+                        </table>
+                        <div style="font-size:16px;">
+                            <b>Symptoms:</b>
+                            <span style="border-bottom: 1px solid black; width: 59%; display: inline-block;"></span>
+                            <span style="padding-left: 10px;">
+                                <b>Allergies:</b>
+                            </span>
+                            <span style="border-bottom: 1px solid black; width: 21%; display: inline-block;"></span>
+                        </div>
+                        <div style="font-size:16px;margin-top:30px;">
+                            <b>Diagnose:</b>
+                            <span style="border-bottom: 1px solid black; width: 85%; display: inline-block;"></span>
+                            <div style="text-align:right;margin-top:5px;">
+                                <b style="font-size:20px;font-weight:bold;">VCO</b>
+                            </div>
+                        </div>
+                        <br></br>
+                        <div style="border: 0; border-top: 2px solid black; width: 100%;"></div>
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-4" style="margin-top:30px;" >
+                                    <span style="font-size:18px;font-weight:bold; text-decoration: underline;">Vitals:</span>
+                                    <div style="margin-top:7px;font-size:17px;">B.P:</div>
+                                    <div style="margin-top:7px;font-size:17px;">Temp:</div>
+                                    <div style="margin-top:7px;font-size:17px;">P.R:</div>
+                                    <div style="margin-top:7px;font-size:17px;">R.R:</div>
+                                    <div style="margin-top:7px;font-size:17px;">Weight:</div>
+                                    <div style="font-size:18px; padding-top: 30px; margin-top:30px;font-weight:bold;text-decoration: underline;" >Advised:</div>
 
                                 </div>
-
-
-                            </div>
-
-                            <div class="col-12">
-                                <div class="row">
-                                    <div class="col-10">
-
-
-                                    </div>
-
-                                    <div class="col-2">
-                                        <span style="font-size:17px;" >Signature/Stamp</span>
-                                    </div>
-
+                                <div class="col-1" style="border-left: 2px solid black; height: 560px;"/>
+                                <div class="col-7" style="margin-top:20px;margin-left:-20px;">
+                                    <span style="font-size:30px;font-weight:bold;">Rx</span>
                                 </div>
 
-
                             </div>
 
-
-                            <!-- Flexbox Layout for Vitals and Rx -->
-<!--                            <div style="font-size:16px; display: flex; justify-content: space-between; align-items: center;">-->
-<!--                                &lt;!&ndash; Vitals Section &ndash;&gt;-->
-<!--                                <div style="border-left: 2px solid black; height: 800px; margin: 0 200px;"></div>-->
-<!--                                <div>-->
-<!--                                    <b>Vitals:</b>-->
-<!--                                    <div>B.P</div>-->
-<!--                                </div>-->
-<!--                                <div>-->
-<!--                                    <b>Rx</b>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div style="display: flex; justify-content: space-between; border-top: 2px solid black; padding-top: 10px;">-->
-<!--                                &lt;!&ndash; Left side content with vertical line &ndash;&gt;-->
-<!--                                <div style="height: 800px; border-left: 2px solid black; padding-left: 30px;">-->
-<!--                                    <b>Vitals:</b><br/>-->
-<!--                                    B.P:<br/>-->
-<!--                                    Temp:<br/>-->
-<!--                                    P.R:<br/>-->
-<!--                                    Weight:<br/>-->
-<!--                                    <b>Advised:</b>-->
-<!--                                </div>-->
-
-<!--                                &lt;!&ndash; Right side content with alignment and Rx centered &ndash;&gt;-->
-<!--                                <div style="width: 45%; text-align: center;">-->
-<!--                                    <b>Rx:</b><br/>-->
-<!--                                </div>-->
-<!--                            </div>-->
 
                         </div>
-                        </t>
-                    </t>
-                </xpath>
+
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-10">
+                                </div>
+                                <div class="col-2">
+                                    <span style="font-size:17px;" >Signature/Stamp</span><br/>
+                                    <span style="font-size:17px;" >Date:</span><br/>
+                                    <span style="font-size:17px;" >Time:</span>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </xpath>
     </template>
-</openerp>
+</odoo>

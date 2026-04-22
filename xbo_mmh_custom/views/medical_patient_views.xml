@@ -42,7 +42,7 @@
 
             <xpath expr="//header" position="inside">
                 <button name="action_view_create_prescription" type="object" string="Create Prescription" class="btn-primary" data-hotkey="q"/>
-                <button name="action_create_invoice" invisible="invoice_count > 0" type="object" string="Create Invoice" class="btn-primary" data-hotkey="q"/>
+<!--                <button name="action_create_invoice" invisible="invoice_count > 0" type="object" string="Create Invoice" class="btn-primary" data-hotkey="q"/>-->
             </xpath>
 
             <xpath expr="//button[@name='print_report']" position="attributes">
@@ -81,6 +81,10 @@
                 <attribute name="required">1</attribute>
             </xpath>
             <xpath expr="//field[@name='sex']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='primary_care_physician_id']" position="attributes">
                 <attribute name="required">1</attribute>
             </xpath>
 

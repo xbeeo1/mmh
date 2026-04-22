@@ -20,7 +20,7 @@ class MedicalPrescriptionOrderInherit(models.Model):
     """COUNT ALL RELATED INVOICES"""
     def _invoice_total(self):
         for rec in self:
-            invoice_count = self.env['account.move'].search_count([('invoice_origin', '=', rec.patient_id.name)])
+            invoice_count = self.env['account.move'].search_count([('partner_id', '=', rec.patient_id.patient_id.id), ('invoice_origin', '=', rec.name)])
             rec.invoice_count = invoice_count
 
             invoice = self.env['account.move'].search([('partner_id', '=', rec.patient_id.patient_id.id), ('invoice_origin', '=', rec.name)])
@@ -28,7 +28,7 @@ class MedicalPrescriptionOrderInherit(models.Model):
 
     def action_print_patient_card(self):
         self.ensure_one()
-        invoice_count = self.env['account.move'].search_count([('invoice_origin', '=', self.patient_id.name),('date','=',self.prescription_date.date())])
+        invoice_count = self.env['account.move'].search_count([('partner_id', '=', self.patient_id.patient_id.id), ('invoice_origin', '=', self.name),('date','=',self.prescription_date.date())])
         if invoice_count > 0:
             return self.env.ref("xbo_mmh_custom.pre_report_print_patient_card").report_action(self.patient_id)
         else:
@@ -42,7 +42,7 @@ class MedicalPrescriptionOrderInherit(models.Model):
             "res_model": "account.move",
             "name": _("Invoice"),
             'view_mode': 'list,form',
-            'domain': [('invoice_origin', '=', self.patient_id.name)],
+            'domain': [('partner_id', '=', self.patient_id.patient_id.id), ('invoice_origin', '=', self.name)],
         }
         return result
 
@@ -77,7 +77,7 @@ class MedicalPrescriptionOrderInherit(models.Model):
                 'product_id': line.medicament_id.product_id.id,
                 'name': line.medicament_id.product_id.display_name or '',
                 'quantity': line.quantity,
-                'price_unit': line.medicament_id.product_id.lst_price,
+                'price_unit': self.treatment_fees if line.medicament_id.product_id.is_checkup_fees and self.treatment_fees else line.medicament_id.product_id.lst_price,
                 'product_uom_id': line.medicament_id.product_id.uom_id.id,
 
             }),
@@ -90,7 +90,7 @@ class MedicalPrescriptionOrderInherit(models.Model):
             # 'name': self.env['ir.sequence'].next_by_code('pres_inv_seq'),
             'move_type': 'out_invoice',
             'ref': self.name,
-            'invoice_origin': self.patient_id.name or '',
+            'invoice_origin': self.name or '',
             'date': date.today(),
             'partner_id': self.patient_id.patient_id.id,
             'doctor_id': self.doctor_id.partner_id.id,
