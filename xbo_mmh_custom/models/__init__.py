@@ -24,3 +24,4 @@ from . import pos_order
 from . import partner_lab
 from . import outsourced_lab_request
 from . import purchase_order
+from . import report_sign

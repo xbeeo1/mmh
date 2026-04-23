@@ -46,6 +46,7 @@
         'views/stock_lot_views.xml',
         'views/stock_move_views.xml',
         'views/stock_picking_views.xml',
+        'views/report_signatory_view.xml',
         'wizard/bulk_create_invoice.xml',
         'report/pdf/patient_card_report_template.xml',
         'report/pdf/lab_test_report_template.xml',

@@ -16,4 +16,4 @@ access_bulk_create_invoice,bulk.create.invoice,model_bulk_create_invoice,base.gr
 access_partner_lab,partner.lab,model_partner_lab,base.group_user,1,1,1,1
 access_outsourced_lab_request,outsourced.lab.request,model_outsourced_lab_request,base.group_user,1,1,1,1
 access_outsourced_lab_test_line,outsourced.lab.test.line,model_outsourced_lab_test_line,base.group_user,1,1,1,1
-
+access_report_signatory_user,access.report.signatory.user,model_report_signatory,,1,1,1,1

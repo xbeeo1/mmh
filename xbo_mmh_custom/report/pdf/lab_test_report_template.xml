@@ -2,40 +2,16 @@
 <openerp>
 
     <template id="custom_lab_external_layout_striped">
-        <div t-attf-class="o_company_#{company.id}_layout header">
-            <div class="d-flex">
-                <div>
-                    <img t-if="company.logo" class="o_company_logo_big" t-att-src="image_data_uri(company.logo)" alt="Logo"/>
-                    <div t-if="company.report_header" t-field="company.report_header" class="o_company_tagline fw-bold mt-2">Company tagline</div>
-                </div>
-                <div class="ms-3" name="company_address">
-                    <ul class="list-unstyled" name="company_address_list">
-                        <li t-if="company.is_company_details_empty">
-                            <span t-field="company.partner_id" t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}'>
-                                <div class="bg-light border-1 rounded h-100 d-flex flex-column align-items-center justify-content-center p-4 w-100 opacity-75 text-muted text-center">
-                                    <strong>Company address block</strong>
-                                    <div>Contains the company address.</div>
-                                </div>
-                            </span>
-                        </li>
-                        <li t-else="">
-                            <span t-field="company.company_details">
-                                <div class="bg-light border-1 rounded h-100 d-flex flex-column align-items-center justify-content-center p-4 w-100 opacity-75 text-muted text-center">
-                                    <strong>Company details block</strong>
-                                    <div>Contains the company details.</div>
-                                </div>
-                            </span>
-                        </li>
-                        <li t-if="not forced_vat"/>
-                        <li t-else="">
-                            <t t-esc="company.country_id.vat_label or 'Tax ID'">Tax ID</t>:
-                            <span t-esc="forced_vat">US12345671</span>
-                        </li>
-                    </ul>
+        <div t-attf-class="o_company_#{company.id}_layout header" style="margin:0; padding:0;">
+            <div class="d-flex" style="margin:0; padding:0; align-items:flex-start;">
+                <div style="width:100%; margin:0; padding:0;">
+                    <img
+                         t-att-src="'/xbo_mmh_custom/static/images/mmh_logo.png'"
+                         style="width:100%; height:190px; object-fit:contain; display:block; margin-top:-10px;"
+                         alt="Logo"/>
                 </div>
             </div>
         </div>
-
         <div t-attf-class="o_company_#{company.id}_layout article o_report_layout_striped o_table_striped o_snail_mail {{'o_report_layout_background' if company.layout_background != 'Blank' else ''}}"
              t-attf-style="background-image: url({{ 'data:image/png;base64,%s' % company.layout_background_image.decode('utf-8') if company.layout_background_image and company.layout_background == 'Custom' else
                            '/base/static/img/demo_logo_report.png' if company.layout_background == 'Demo logo' else ''}});"
@@ -48,16 +24,38 @@
         </div>
 
         <div t-attf-class="footer o_company_#{company.id}_layout {{report_type != 'pdf' and 'mt-auto'}}">
+            <div class="row" style="margin-top:16px; font-size:12px;">
+                <t t-set="designations" t-value="['Lab Technician', 'Technologist', 'Pathologist']"/>
+                <t t-set="seq" t-value="1"/>
+                <t t-foreach="designations" t-as="designation">
+                     <t t-set="signatories"
+                   t-value="request.env['report.signatory'].search([('sequence','=',seq)])"/>
+                    <div class="col-4 text-center" style="border:2px solid #000000;">
+                        <div style="font-weight:700;font-size:17px;">
+                            <b>
+                                <t t-esc="designation"/>:
+                            </b>
+                        </div>
+                        <div style="font-weight:700;font-size:17px;">
+                            <b>
+                                <t t-esc="signatories.name"/>
+                            </b>
+                        </div>
+                        <div>
+                            <t t-esc="signatories.description"/>
+                        </div>
+                    </div>
+                    <t t-set="seq" t-value="seq + 1"/>
+                </t>
+            </div>
 
             <div class="text-center">
                 <span>
-                    This is electronically verified report doesn't require Sign &amp; Stamp. Not valid for Court
+                   Computer generated Lab Report and will not needed for signature
                 </span>
             </div>
             <div class="o_footer_content border-top pt-2 text-center">
-                <div t-field="company.report_footer"/>
-                <div t-if="report_type == 'pdf' and display_name_in_footer" class="text-muted" t-out="o.name">(document name)</div>
-                <div t-if="report_type == 'pdf'" class="text-muted">Page <span class="page"/> / <span class="topage"/></div>
+                <div t-if="report_type == 'pdf'" style="font-size:10px;" class="text-muted">Page <span class="page"/> / <span class="topage"/></div>
             </div>
         </div>
     </template>
@@ -232,7 +230,13 @@
                     </div>
                     <b/>
                     <div style="margin-top:20px;" >
-                        <b>Remarks:</b>
+                        <b>Remarks:</b><br/>
+                        <span style="font-weight:normal;margin-left:60px;" t-field="doc.results"/>
+                    </div>
+                    <hr/>
+                    <div style="margin-top:20px;" >
+                        <b>Diagnosis:</b><br/>
+                        <span style="font-weight:normal;margin-left:60px;" t-field="doc.diagnosis"/>
                     </div>
                     <b/>
 <!--                    <div class="row" id="informations" style="position: absolute; bottom: 0; width: 100%; margin-bottom: 20px;">-->
