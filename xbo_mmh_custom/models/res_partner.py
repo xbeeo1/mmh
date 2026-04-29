@@ -32,6 +32,7 @@ class ResPartnerInherit(models.Model):
 
     """CREATE METHOD FOR VALIDATION ON DUPLICATION CNIC"""
     def create(self, vals):
+        sector_type = None
         if isinstance(vals, list):
             for val in vals:
                 sector_type = val.get('sector_type')
