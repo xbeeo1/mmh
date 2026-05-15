@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="contract_type_probation" model="hr.contract.type">
+            <field name="name">Probation</field>
+            <field name="sequence">1013</field>
+        </record>
+        <record id="contract_type_oncall" model="hr.contract.type">
+            <field name="name">OnCall</field>
+            <field name="sequence">1014</field>
+        </record>
+    </data>
+</odoo>
