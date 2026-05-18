@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Tree View -->
+    <record id="view_tax_slab_list" model="ir.ui.view">
+        <field name="name">tax.slab.list</field>
+        <field name="model">tax.slab.line</field>
+        <field name="arch" type="xml">
+
+            <list editable="bottom">
+                <field name="name"/>
+                <field name="min_amount"/>
+                <field name="max_amount"/>
+                <field name="tax_percent"/>
+                <field name="fixed_tax"/>
+            </list>
+
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_tax_slab" model="ir.actions.act_window">
+        <field name="name">W.H.T Tax Slabs</field>
+        <field name="res_model">tax.slab.line</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <!-- Menu -->
+
+    <menuitem id="menu_tax_slab"
+              name="W.H.T Tax Slabs"
+              parent="om_hr_payroll.menu_hr_payroll_configuration"
+              action="action_tax_slab"
+                sequence="3" />
+
+
+</odoo>

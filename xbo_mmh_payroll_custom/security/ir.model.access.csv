@@ -17,6 +17,6 @@ access_provident_fund_detail_user,provident_fund_detail_user,model_provident_fun
 access_provident_fund_detail_lines_user,provident_fund_detail_lines_user,model_provident_fund_detail_lines,base.group_user,1,1,1,0
 access_provident_fund_profit_user,provident_fund_profit_user,model_provident_fund_profit,base.group_user,1,1,1,0
 access_provident_fund_disbursed_user,provident_fund_disbursed_user,model_provident_fund_disbursed,base.group_user,1,1,1,0
-
+access_tax_slab_line,tax_slab_line,model_tax_slab_line,,1,1,1,1
 
 

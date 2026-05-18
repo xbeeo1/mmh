@@ -17,4 +17,5 @@ from . import hr_leave_type
 from . import res_config_setting
 from . import account_move
 from . import hr_leave_allocation
+from . import tax_slab_line
 

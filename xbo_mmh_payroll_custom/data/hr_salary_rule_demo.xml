@@ -99,7 +99,7 @@
             <field name="name">W.H.T</field>
             <field name="category_id" ref="om_hr_payroll.DED"/>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = -(contract.wht_amount)</field>
+            <field name="amount_python_compute">result = -(contract.wht_calculation(categories.BASIC, categories.ALW))</field>
             <field name="appears_on_payslip" eval="True"/>
             <field name="sequence" eval="160"/>
         </record>
@@ -193,11 +193,19 @@
             <field name="sequence" eval="106"/>
         </record>
 
-        <record id="om_hr_payroll.hr_rule_net" model="hr.salary.rule">
+        <record id="om_hr_payroll.hr_rule_taxable" model="hr.salary.rule">
 
-            <field name="amount_python_compute">result = categories.BASIC + categories.ALW + categories.SPECIALALW + categories.DED</field>
+            <field name="amount_python_compute">result = categories.BASIC + categories.ALW + categories.Medical</field>
 
         </record>
+
+        <record id="om_hr_payroll.hr_rule_net" model="hr.salary.rule">
+
+            <field name="amount_python_compute">result = categories.BASIC + categories.ALW+ categories.Medical + categories.SPECIALALW + categories.DED</field>
+
+        </record>
+
+
 
     </data>
 </odoo>

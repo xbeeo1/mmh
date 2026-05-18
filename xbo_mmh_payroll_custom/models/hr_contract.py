@@ -264,6 +264,41 @@ class HrContract(models.Model):
     #     return 0
 
     @api.model
+    def wht_calculation(self, basic, allowance):
+        # Monthly Taxable Salary
+        monthly_salary = (
+                (basic or 0.0)
+                + (allowance or 0.0)
+        )
+
+        # Convert to Annual Salary
+        annual_salary = monthly_salary * 12
+
+        slab = self.env['tax.slab.line'].search([
+            ('min_amount', '<=', annual_salary),
+            ('max_amount', '>=', annual_salary)
+        ], limit=1)
+
+        annual_tax = 0.0
+
+        if slab:
+            exceeding_amount = (
+                    annual_salary - slab.min_amount
+            )
+
+            annual_tax = slab.fixed_tax + (
+                    exceeding_amount * slab.tax_percent / 100
+            )
+
+        # Monthly WHT
+        monthly_tax = annual_tax / 12
+
+        return round(monthly_tax, 2)
+
+
+
+
+    @api.model
     def ph_days_calculation(self, payslip):
         ph_obj = self.env['resource.calendar.leaves'].search([
             ('date_from', '<=', payslip.date_to),
