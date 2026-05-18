@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_payslip_inherit_remove_code"
+              inherit_id="om_hr_payroll.report_payslip">
+
+        <!-- Remove Code Header -->
+        <xpath expr="//th[text()='Code']" position="replace">
+        </xpath>
+        <xpath expr="//th[text()='Quantity/rate']" position="replace">
+        </xpath>
+
+        <!-- Remove Code Field -->
+        <xpath expr="//td/span[@t-field='line.code']/.." position="replace">
+        </xpath>
+
+        <xpath expr="//td/span[@t-field='line.quantity']/.." position="replace">
+        </xpath>
+
+        <xpath expr="//table[2]/thead" position="attributes">
+
+            <attribute name="style">
+                background-color:#c2d6d6;
+            </attribute>
+
+        </xpath>
+
+        <xpath expr="//table[2]/thead/tr/th[1]" position="attributes">
+            <attribute name="style">
+                font-weight:bold;
+                color:black;
+            </attribute>
+        </xpath>
+        <xpath expr="//table[2]/thead/tr/th[2]" position="attributes">
+            <attribute name="style">
+                font-weight:bold;
+                color:black;
+            </attribute>
+        </xpath>
+
+        <xpath expr="//table[2]/thead/tr/th[3]" position="attributes">
+            <attribute name="style">
+                font-weight:bold;
+                color:black;
+            </attribute>
+        </xpath>
+
+        <xpath expr="//p[strong='Authorized signature']"
+               position="replace">
+
+            <p style="
+                text-align:center;
+                font-weight:bold;
+                margin-top:50px;
+            ">
+
+                <strong>This is an automatically generated payslip and does not require any signature</strong>
+
+            </p>
+
+        </xpath>
+
+        <xpath expr="//tbody/tr[@t-as='line']"
+               position="attributes">
+
+            <attribute name="t-att-style">
+                'background-color:#c2d6d6; font-weight:bold;'
+                if line.name in ['Gross','Taxable Salary','Net Salary']
+                else ''
+            </attribute>
+
+        </xpath>
+
+        <xpath expr="//span[@t-field='o.date_from']"
+               position="attributes">
+
+            <attribute name="t-options">
+                {"format": "dd/MM/yyyy"}
+            </attribute>
+
+        </xpath>
+
+        <!-- Date To -->
+        <xpath expr="//span[@t-field='o.date_to']"
+               position="attributes">
+
+            <attribute name="t-options">
+                {"format": "dd/MM/yyyy"}
+            </attribute>
+
+        </xpath>
+
+    </template>
+
+</odoo>

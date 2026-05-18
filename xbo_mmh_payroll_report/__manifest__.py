@@ -21,6 +21,7 @@
         'security/ir.model.access.csv',
         'report/payslip_template.xml',
         'report/employee_pf_template.xml',
+        'report/custom_report_payslip_template.xml',
         'report/report_action.xml',
         'wizards/employee_payslip_wizard.xml',
         'wizards/employee_pf_report_wizard.xml',
