@@ -204,7 +204,7 @@ class HrPayslip(models.Model):
                 'payslip_id' : slip.id
             }
 
-            line = slip.details_by_salary_rule_category.filtered(lambda l:l.code == 'TOTALGROSS')
+            line = slip.details_by_salary_rule_category.filtered(lambda l:l.code == 'GROSS')
             amount = abs(currency.round(slip.credit_note and -line.total or line.total))
             if not currency.is_zero(amount):
                 if not slip.company_id.salary_expense_account_id:
@@ -382,7 +382,7 @@ class HrPayslip(models.Model):
                     })
                     line_ids1.append(credit_line)
 
-            line = slip.details_by_salary_rule_category.filtered(lambda l: l.code == 'HDL')
+            line = slip.details_by_salary_rule_category.filtered(lambda l: l.code == 'LD')
             amount = abs(currency.round(slip.credit_note and -line.total or line.total))
             if not currency.is_zero(amount):
                 if not slip.company_id.half_day_leave_deduction_account_id:
@@ -405,7 +405,7 @@ class HrPayslip(models.Model):
                     })
                     line_ids1.append(credit_line)
 
-            line = slip.details_by_salary_rule_category.filtered(lambda l: l.code == 'EL')
+            line = slip.details_by_salary_rule_category.filtered(lambda l: l.code == 'SHD')
             amount = abs(currency.round(slip.credit_note and -line.total or line.total))
             if not currency.is_zero(amount):
                 if not slip.company_id.excess_leave_deduction_account_id:
@@ -490,8 +490,8 @@ class HrPayslip(models.Model):
                     line_ids2.append(credit_line)
 
             move_dict_2['line_ids'] = line_ids2
-            move = self.env['account.move'].create(move_dict_2)
-            slip.write({'date': date})
+            # move = self.env['account.move'].create(move_dict_2)
+            # slip.write({'date': date})
 
             name = _('Payslip of %s') % (slip.employee_id.name)
             move_dict_3 = {
@@ -549,8 +549,8 @@ class HrPayslip(models.Model):
                     line_ids3.append(credit_line)
 
             move_dict_3['line_ids'] = line_ids3
-            move = self.env['account.move'].create(move_dict_3)
-            slip.write({'date': date})
+            # move = self.env['account.move'].create(move_dict_3)
+            # slip.write({'date': date})
 
             name = _('Payslip of %s') % (slip.employee_id.name)
             move_dict_4 = {
@@ -632,8 +632,8 @@ class HrPayslip(models.Model):
                     line_ids4.append(credit_line)
 
             move_dict_4['line_ids'] = line_ids4
-            move = self.env['account.move'].create(move_dict_4)
-            slip.write({'date': date})
+            # move = self.env['account.move'].create(move_dict_4)
+            # slip.write({'date': date})
 
 
         return
