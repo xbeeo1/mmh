@@ -14,6 +14,7 @@ from . import hr_department
 from . import product_template
 from . import product_product
 from . import account_move
+from . import account_move_line
 from . import pos_order_line
 from . import account_asset
 from . import medical_room
@@ -25,3 +26,4 @@ from . import partner_lab
 from . import outsourced_lab_request
 from . import purchase_order
 from . import report_sign
+from . import account_payment
