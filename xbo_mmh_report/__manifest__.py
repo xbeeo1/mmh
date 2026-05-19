@@ -20,6 +20,7 @@
         'security/ir.model.access.csv',
         'report/multidays_profit_loss_template.xml',
         'report/pos_profit_loss_report_template.xml',
+        'report/report_partner_ledger.xml',
         'report/report_action.xml',
         'wizards/multidays_profit_loss_wizard.xml',
         'wizards/pos_profit_loss_wizard_views.xml',

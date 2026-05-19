@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_partnerledger_inherit"
+              inherit_id="accounting_pdf_reports.report_partnerledger">
+
+        <!-- Header -->
+        <xpath expr="//table/thead/tr/th[4]" position="after">
+            <th>Description</th>
+        </xpath>
+
+        <!-- Body -->
+        <xpath expr="//tr[@t-foreach='lines(data, o)']/td[4]" position="after">
+            <td>
+                <span t-esc="line['description']"/>
+            </td>
+        </xpath>
+
+        <xpath expr="//tr/td[@colspan='4']" position="attributes">
+            <attribute name="colspan">5</attribute>
+        </xpath>
+
+    </template>
+
+</odoo>
