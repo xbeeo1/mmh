@@ -208,7 +208,16 @@ class HrLoan(models.Model):
         return self.write({'state': 'refuse'})
 
     def action_submit(self):
-        """ Function to submit loan request"""
+        if self.employee_id.contract_date_start and self.employee_id.contract_date_end:
+            if (self.date + relativedelta(years=1)) > self.employee_id.contract_date_end:
+                raise ValidationError(
+                    _("There must be at least a 1-year gap between the request date and contract end date.")
+                )
+        else:
+            raise ValidationError(_("Please add emplyee contract date"))
+        if self.loan_type_id.type == 'loan' and  self.loan_amount > (self.employee_id.wage * 3):
+            raise ValidationError(_("The loan amount not exceed the employee's three-month salary."))
+
         self.write({'state': 'waiting_approval_1'})
 
     def action_cancel(self):
