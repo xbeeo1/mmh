@@ -8,6 +8,7 @@
         <xpath expr="//th[text()='Code']" position="replace">
         </xpath>
         <xpath expr="//th[text()='Quantity/rate']" position="replace">
+            <th>Number Of Days</th>
         </xpath>
 
         <!-- Remove Code Field -->
@@ -15,6 +16,61 @@
         </xpath>
 
         <xpath expr="//td/span[@t-field='line.quantity']/.." position="replace">
+            <td>
+
+                <t t-if="line.name == 'Basic Salary'">
+
+                    <span t-esc="
+                        o.worked_days_line_ids.filtered(
+                            lambda w: w.name == 'Normal Working Days paid at 100%'
+                        )[:1].number_of_days
+                    "/>
+
+                </t>
+
+                <t t-if="line.name == 'Paid Time Off'">
+
+                    <span t-esc="
+                        abs(o.worked_days_line_ids.filtered(
+                            lambda w: w.name == 'Paid Time Off'
+                        )[:1].number_of_days)
+                    "/>
+
+                </t>
+
+                <t t-if="line.name == 'Special Leave'">
+
+                    <span t-esc="
+                        abs(o.worked_days_line_ids.filtered(
+                            lambda w: w.name == 'Special Leave'
+                        )[:1].number_of_days)
+                    "/>
+
+                </t>
+
+                <t t-if="line.name == 'Public Holiday'">
+
+                    <span t-esc="
+                        abs(o.worked_days_line_ids.filtered(
+                            lambda w: w.name == 'Global Leaves'
+                        )[:1].number_of_days)
+                    "/>
+
+                </t>
+
+                <t t-if="line.name == 'Short Hours Deduction'">
+
+                    <span t-esc="o.late_count"/>
+
+                </t>
+
+                <t t-if="line.name == 'Late Deduction'">
+
+                    <span t-esc="o.shd_count"/>
+
+                </t>
+
+            </td>
         </xpath>
 
         <xpath expr="//table[2]/thead" position="attributes">
