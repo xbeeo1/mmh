@@ -6,6 +6,11 @@
         <field name="model">hr.payslip</field>
         <field name="inherit_id" ref="om_hr_payroll.view_hr_payslip_form"/>
         <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_payslip_cancel']" position="after">
+                <button string="Print" name="action_print_report" type="object" invisible="state not in ('draft', 'verify','done')"
+                                class="oe_highlight"/>
+            </xpath>
+
             <xpath expr="//field[@name='input_line_ids']//list//field[@name='sequence']" position="after">
                 <field name="loan_line_id" column_invisible="True"/>
             </xpath>

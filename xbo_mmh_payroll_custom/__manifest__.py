@@ -39,6 +39,7 @@
         'views/work_entry_types_views.xml',
         'views/tax_slab_line_views.xml',
         'views/hr_leave_type_view.xml',
+        'views/resource_calendar_views.xml',
         'views/provident_fund_detail_view.xml',
         'wizards/provident_fund_profit.xml',
         'wizards/provident_fund_disbursed.xml',

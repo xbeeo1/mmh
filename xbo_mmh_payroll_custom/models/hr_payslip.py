@@ -8,6 +8,9 @@ from odoo.exceptions import UserError, ValidationError
 class HrPayslip(models.Model):
     _inherit = 'hr.payslip'
 
+    late_count = fields.Integer(string='Late Count')
+    shd_count = fields.Integer(string='Shd Count')
+
     @api.model
     def get_inputs(self, contract_ids, date_from, date_to):
         """Compute additional inputs for the employee payslip,
@@ -115,7 +118,10 @@ class HrPayslip(models.Model):
                     payslip_start_month = payslip_start_date.month
                     payslip_start_year = payslip_start_date.year
                     no_of_days = self._numberOfDays(payslip_start_year, payslip_start_month)
-                    amount = ((employee_id.wage / no_of_days) * 0.25) * (late_count-2)
+                    amount = 0
+                    if late_count > 2:
+                        amount = ((employee_id.wage / no_of_days) * 0.25) * (late_count-2)
+                        self.late_count = late_count - 2
                     result['amount'] = amount
 
             if result.get('code') == 'SHD':
@@ -135,6 +141,7 @@ class HrPayslip(models.Model):
                     payslip_start_year = payslip_start_date.year
                     no_of_days = self._numberOfDays(payslip_start_year, payslip_start_month)
                     amount = ((employee_id.wage / no_of_days) * 0.25) * (late_count)
+                    self.shd_count = late_count
                     result['amount'] = amount
 
         return res
@@ -166,7 +173,8 @@ class HrPayslip(models.Model):
 
 
 
-
+    def action_print_report(self):
+        return self.env.ref('om_hr_payroll.action_report_payslip').report_action(self)
 
 
     def custom_action_payslip_done(self):
