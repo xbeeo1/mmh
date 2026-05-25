@@ -208,10 +208,10 @@ class HrLoan(models.Model):
         return self.write({'state': 'refuse'})
 
     def action_submit(self):
-        if self.employee_id.contract_date_start and self.employee_id.contract_date_end:
-            if (self.date + relativedelta(years=1)) > self.employee_id.contract_date_end:
+        if self.employee_id.contract_date_start:
+            if self.date < (self.employee_id.contract_date_start + relativedelta(years=1)):
                 raise ValidationError(
-                    _("There must be at least a 1-year gap between the request date and contract end date.")
+                    _("There must be at least a 1-year gap between the request date and contract Start date.")
                 )
         else:
             raise ValidationError(_("Please add emplyee contract date"))
