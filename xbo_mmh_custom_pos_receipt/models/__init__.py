@@ -5,6 +5,7 @@ from . import patient_type
 from . import pos_session
 from . import pos_config
 from . import res_config_setting
+from . import pos_order
 
 
 

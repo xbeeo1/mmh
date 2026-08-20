@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t
+        t-inherit="point_of_sale.ControlButtons"
+        t-inherit-mode="extension"
+    >
+        <xpath
+            expr="//InternalNoteButton[@label.translate='Note']"
+            position="after"
+        >
+            <button
+                t-if="!props.showRemainingButtons"
+                class="btn btn-secondary btn-lg border-0 text-truncate"
+                t-on-click="() => this.selectOrderType()"
+            >
+                <t t-if="this.currentOrder.order_type">
+                    <t t-esc="this.currentOrder.order_type"/>
+                </t>
+                <t t-else="">
+                    Type
+                </t>
+            </button>
+        </xpath>
+    </t>
+
+</templates>
