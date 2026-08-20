@@ -18,8 +18,31 @@ class MedicalPatientLabTest(models.Model):
     outsourced_lab_request = fields.Boolean(string="Outsourced Lab Request")
 
     partner_lab_id = fields.Many2one(comodel_name='partner.lab', string="Partner Lab")
+    invoice_count = fields.Integer(string="Journal Entries", compute='_invoice_total')
+    amount_invoice = fields.Float(string="Amount", compute='_invoice_total', group_operator="sum", store=True)
 
+    @api.depends('request', 'patient_id')
+    def _invoice_total(self):
+        for rec in self:
+            invoice_count = rec.env['account.move'].search_count(
+                [('partner_id', '=', rec.patient_id.patient_id.id), ('invoice_origin', 'ilike', rec.request)])
+            rec.invoice_count = invoice_count
+            invoice = rec.env['account.move'].search(
+                [('partner_id', '=', rec.patient_id.patient_id.id), ('invoice_origin', 'ilike', rec.request)])
+            rec.amount_invoice = sum(inv['amount_total_in_currency_signed'] for inv in invoice)
 
+    """VIEW ALL JOURNAL INVOICES"""
+
+    def action_view_invoices(self):
+        self.ensure_one()
+        result = {
+            "type": "ir.actions.act_window",
+            "res_model": "account.move",
+            "name": _("Invoice"),
+            'view_mode': 'list,form',
+            'domain': [('partner_id', '=', self.patient_id.patient_id.id), ('invoice_origin', 'ilike', self.request)],
+        }
+        return result
 
 
     @api.onchange('patient_id_name')

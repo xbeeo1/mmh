@@ -5,13 +5,16 @@ from odoo.exceptions import ValidationError
 from datetime import datetime, timedelta, date
 from dateutil.relativedelta import relativedelta
 
+
 class StockMOveInherit(models.Model):
     _inherit = 'stock.move'
     _description = 'stock.move.inherit'
 
     batch_name = fields.Char(string="Batch Name", related='move_line_ids.lot_id.name', store=True)
     expiration_date = fields.Datetime(string="Expiration Date", related='move_line_ids.expiration_date', store=True)
-    mrp_date = fields.Date(string="MFG Date", readonly= False)
+    bypass_expiry_validation = fields.Boolean(string="Bypass Expiry Validation", default=False)
+
+    mrp_date = fields.Date(string="MFG Date", readonly=False)
     # mrp_date = fields.Date(string="MFG Date", readonly= False)
 
     shelf_type = fields.Selection(string="Shelf Life", selection=[('with_shelf_life', 'With Shelf Life'),
@@ -19,20 +22,20 @@ class StockMOveInherit(models.Model):
                                   default='without_shelf_life')
     shelf_life = fields.Float(string="Shelf Life (%)", compute='_compute_shelf_life')
 
-
-
-    @api.constrains('expiration_date', 'picking_id')
+    @api.constrains('expiration_date', 'bypass_expiry_validation')
     def _check_expiration_date_gap(self):
         for move in self:
-            if move.expiration_date and move.picking_id.scheduled_date and move.expiration_date != move.picking_id.scheduled_date:
-
-                if move.expiration_date < move.picking_id.scheduled_date + relativedelta(months=6):
-                    raise ValidationError(_(
-                        "Expiration Date must be at least 6 months after Scheduled Date."
-                    ))
-
+            if move.expiration_date and move.picking_id.scheduled_date:
+                if move.expiration_date != move.picking_id.scheduled_date:
+                    if move.expiration_date < move.picking_id.scheduled_date + relativedelta(months=6):
+                        if not move.bypass_expiry_validation:
+                            raise ValidationError(_(
+                                "Expiration Date must be at least 6 months after Scheduled Date. "
+                                "Check 'Bypass Expiry Validation' to save anyway."
+                            ))
 
     """COMPUTE SHELF LIFE"""
+
     @api.depends('mrp_date', 'shelf_life', 'move_line_ids.expiration_date')
     def _compute_shelf_life(self):
         for rec in self:
@@ -41,7 +44,7 @@ class StockMOveInherit(models.Model):
 
             if move_length <= 1:
                 if rec.move_line_ids.lot_id.mrp_date:
-                    rec.mrp_date= rec.move_line_ids.lot_id.mrp_date
+                    rec.mrp_date = rec.move_line_ids.lot_id.mrp_date
                 if rec.move_line_ids.expiration_date and rec.mrp_date:
 
                     date_today = date.today()
@@ -65,11 +68,3 @@ class StockMOveInherit(models.Model):
 
             else:
                 rec.shelf_life = False
-
-
-
-
-
-
-
-

@@ -30,12 +30,16 @@ class medical_lab_test_invoice(models.TransientModel):
                 sale_journals = self.env['account.journal'].search([('type', '=', 'sale')])
                 invoice_vals = {
                     'name': self.env['ir.sequence'].next_by_code('medical_lab_test_inv_seq'),
-                    'invoice_origin': lab_req.medical_test_type_id.name or '',
+                    'invoice_origin': lab_req.request or '',
                     'move_type': 'out_invoice',
                     'ref': False,
                     'journal_id': sale_journals and sale_journals[0].id or False,
                     'partner_id': lab_req.patient_id.patient_id.id or False,
                     'partner_shipping_id': lab_req.patient_id.patient_id.id,
+                    'department_id': lab_req.doctor_id.partner_id.department_id.id or False,
+                    'patient_type_id': lab_req.patient_id.medical_patient_type_id.id or False,
+                    'doctor_id': lab_req.doctor_id.partner_id.id or False,
+                    'mr_number': lab_req.patient_id.name,
                     'currency_id': lab_req.patient_id.patient_id.currency_id.id,
                     'invoice_payment_term_id': False,
                     'fiscal_position_id': lab_req.patient_id.patient_id.property_account_position_id.id,
@@ -45,29 +49,61 @@ class medical_lab_test_invoice(models.TransientModel):
                 }
                 print('invoice_vals____________', invoice_vals)
                 res = account_invoice_obj.create(invoice_vals)
-                product = lab_req.medical_test_type_id.service_product_id
-                invoice_line_account_id = False
-                if product.id:
-                    invoice_line_account_id = product.property_account_income_id.id or product.categ_id.property_account_income_categ_id.id or False
-                if not invoice_line_account_id:
-                    inc_acc = self.env['product.category'].browse('property_account_income_categ_id')
-                if not invoice_line_account_id:
-                    raise UserError(
-                        _('There is no income account defined for this product: "%s". You may have to install a chart of account from Accounting app, settings menu.') %
-                        (product.name,))
-                tax_ids = []
-                taxes = product.taxes_id.filtered(
-                    lambda r: not product.company_id or r.company_id == product.company_id)
-                tax_ids = taxes.ids
-                invoice_line_vals = {
-                    'name': lab_req.medical_test_type_id.service_product_id.name or '',
-                    'account_id': invoice_line_account_id,
-                    'price_unit': lab_req.medical_test_type_id.service_product_id.lst_price,
-                    'product_uom_id': lab_req.medical_test_type_id.service_product_id.uom_id.id,
-                    'quantity': 1,
-                    'product_id': lab_req.medical_test_type_id.service_product_id.id,
-                }
-                res1 = res.write({'invoice_line_ids': ([(0, 0, invoice_line_vals)])})
+                invoice_lines = []
+
+                for lab_line in lab_req.lab_test_lines:
+                    test_type = lab_line.medical_test_type_id
+                    product = test_type.service_product_id
+
+                    # Check if a service product is configured
+                    if not product:
+                        raise UserError(
+                            _('No service product defined for test: "%s".')
+                            % test_type.name
+                        )
+
+                    # Get the product's income account
+                    invoice_line_account_id = (
+                            product.property_account_income_id.id
+                            or product.categ_id.property_account_income_categ_id.id
+                    )
+
+                    # Check if an income account is configured
+                    if not invoice_line_account_id:
+                        raise UserError(
+                            _(
+                                'There is no income account defined for this product: "%s". '
+                                'You may have to install a chart of accounts from the '
+                                'Accounting app settings.'
+                            )
+                            % product.name
+                        )
+
+                    # Get taxes applicable to the product's company
+                    taxes = product.taxes_id.filtered(
+                        lambda tax: not product.company_id
+                                    or tax.company_id == product.company_id
+                    )
+
+                    # Prepare invoice line values
+                    invoice_line_vals = {
+                        'name': product.name or '',
+                        'account_id': invoice_line_account_id,
+                        'price_unit': product.lst_price,
+                        'product_uom_id': product.uom_id.id,
+                        'quantity': 1,
+                        'product_id': product.id,
+                        'tax_ids': [(6, 0, taxes.ids)],
+                    }
+
+                    invoice_lines.append((0, 0, invoice_line_vals))
+
+                # Add all lab test lines to the same invoice
+                if invoice_lines:
+                    res.write({
+                        'invoice_line_ids': invoice_lines,
+                    })
+
                 list_of_ids.append(res.id)
             if self._context['active_model'] == 'medical.lab':
                 lab_req = lab_result_obj.browse(active_id)
@@ -79,6 +115,7 @@ class medical_lab_test_invoice(models.TransientModel):
                     'invoice_origin': lab_req.name or '',
                     'department_id': lab_req.patient_id.department_id.id or False,
                     'patient_type_id': lab_req.patient_type_id.id or False,
+                    'mr_number': lab_req.mr_number or False,
                     'move_type': 'out_invoice',
                     'ref': False,
                     'journal_id': sale_journals and sale_journals[0].id or False,

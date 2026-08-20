@@ -19,5 +19,18 @@
         </field>
     </record>
 
+    <record id="view_stock_move_operations_bypass_inherit" model="ir.ui.view">
+        <field name="name">stock.move.operations.bypass.inherit</field>
+        <field name="model">stock.move</field>
+        <field name="inherit_id" ref="stock.view_stock_move_operations"/>
+        <field name="arch" type="xml">
+            <group name="product_qty" position="after">
+                <group>
+                    <field name="bypass_expiry_validation" string="Bypass Expiry Validation"/>
+                </group>
+            </group>
+        </field>
+    </record>
+
 
 </odoo>

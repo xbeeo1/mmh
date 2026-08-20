@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_discharge_slip_report" model="ir.actions.report">
+        <field name="name">Discharge Slip</field>
+        <field name="model">discharge.slip.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">xbo_mmh_custom.report_discharge_slip_document</field>
+        <field name="report_file">xbo_mmh_custom.report_discharge_slip_document</field>
+        <field name="binding_model_id" eval="False"/>
+    </record>
+
+    <template id="report_discharge_slip_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="xbo_mmh_custom.custom_patient_external_layout">
+                    <t t-set="o" t-value="doc"/>
+                    <div class="page" style="font-size:15px;margin-top:0px; padding-top:0px;">
+                        <div>
+                            <h3 class="text-center">
+                                <strong style="background-color: #F2F2F2;">Discharge Slip</strong>
+                            </h3>
+                        </div>
+
+                        <table class="table borderless" style="width:100%; font-size:12px;">
+                            <tr>
+                                <td style="width:34%; padding:2px 4px;">
+                                    <div class="box">
+                                        <b>MR No.:</b>
+                                        <span t-esc="doc.patient_id.name"/>
+                                    </div>
+                                </td>
+                                <td style="width:33%; padding:2px 4px;">
+                                    <div class="box">
+                                        <b>Name:</b>
+                                        <span t-esc="doc.patient_id.patient_id.name"/>
+                                    </div>
+                                </td>
+                                <td style="width:33%; padding:2px 4px;">
+                                    <div class="box">
+                                        <b>CNIC:</b>
+                                        <span t-esc="doc._get_field('patient_cnic')"/>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:34%; padding:2px 4px;">
+                                    <div class="box">
+                                        <b>Gender:</b>
+                                        <span t-esc="doc._get_field('sex')"/>
+                                    </div>
+                                </td>
+                                <td style="width:33%; padding:2px 4px;">
+                                    <div class="box">
+                                        <b>Age:</b>
+                                        <span t-esc="doc._get_field('age')"/>
+                                    </div>
+                                </td>
+                                <td style="width:33%; padding:2px 4px;">
+                                    <div class="box">
+                                        <b>Patient Type :</b>
+                                        <t t-set="ptype" t-value="doc._get_field('medical_patient_type_id')"/>
+                                        <t t-if="ptype and ptype.name != 'MMH'">
+                                            <span t-esc="ptype.name"/>
+                                        </t>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:33%; padding:2px 4px;">
+                                    <div class="box">
+                                        <b>Phone:</b>
+                                        <span t-esc="doc._get_field('phone')"/>
+                                    </div>
+                                </td>
+                                <td style="width:34%; padding:2px 4px;">
+                                    <div class="box">
+                                        <b>Treatment Type:</b>
+                                        <t t-set="ttype" t-value="doc._get_field('treatment_type_id')"/>
+                                        <span t-esc="ttype.name if ttype else ''"/>
+                                    </div>
+                                </td>
+                                <td style="width:34%; padding:2px 4px;">
+                                    <div class="box">
+                                        <b>Address:</b>
+                                        <t t-set="village" t-value="doc._get_field('village_id')"/>
+                                        <span t-esc="village.name if village else ''"/>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <t t-set="invoices" t-value="env['account.move'].search([
+                            ('partner_id', '=', doc.patient_id.patient_id.id),
+                            ('move_type', '=', 'out_invoice'),
+                            ('state', '!=', 'cancel'),
+                            ('invoice_date', '&gt;=', doc.date_from),
+                            ('invoice_date', '&lt;=', doc.date_to),
+                        ])"/>
+                        <t t-set="total_amount" t-value="sum(invoices.mapped('amount_total'))"/>
+
+                        <t t-set="paid_invoices"
+                           t-value="invoices.filtered(lambda inv: inv.payment_state in ('paid', 'in_payment', 'partial'))"/>
+                        <t t-set="amount_paid"
+                           t-value="sum(paid_invoices.mapped(lambda inv: inv.amount_total - inv.amount_residual))"/>
+
+                        <table class="table table-sm mt-1" style="border:1px solid #000;">
+                            <thead>
+                                <tr style="background-color:#f2f2f2;">
+                                    <th class="text-center"  style="border:1px solid #000;">Date</th>
+                                    <th style="border:1px solid #000;">Description</th>
+                                    <th class="text-center" style="border:1px solid #000;">Qty</th>
+                                    <th class="text-end" style="border:1px solid #000;">Unit Price</th>
+                                    <th class="text-end" style="border:1px solid #000;">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="invoices.mapped('invoice_line_ids')" t-as="line">
+                                    <tr>
+                                        <td class="text-center"  style="border:1px solid #000;">
+                                            <span t-esc="line.move_id.invoice_date.strftime('%d/%m/%Y') if line.move_id.invoice_date else ''"/>
+                                        </td>
+                                        <td style="border:1px solid #000;">
+                                            <span t-esc="line.name"/>
+                                        </td>
+                                        <td class="text-center" style="border:1px solid #000;">
+                                            <span t-esc="line.quantity"/>
+                                        </td>
+                                        <td class="text-end" style="border:1px solid #000;">
+                                            <span t-esc="line.price_unit"/>
+                                        </td>
+                                        <td class="text-end" style="border:1px solid #000;">
+                                            <span t-esc="line.price_subtotal"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <div style="page-break-inside: avoid;">
+                            <table class="table table-sm mt-3"
+                                   style="width: 40%; margin-left: auto; border:1px solid #000;">
+                                <tr>
+                                    <td style="border:1px solid #000;">
+                                        <strong>Total Amount</strong>
+                                    </td>
+                                    <td class="text-right" style="border:1px solid #000;">
+                                        <span t-esc="'%.2f' % total_amount"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border:1px solid #000;">
+                                        <strong>Amount Paid</strong>
+                                    </td>
+                                    <td class="text-right" style="border:1px solid #000;">
+                                        <span t-esc="'%.2f' % amount_paid"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border:1px solid #000;">
+                                        <strong>Amount Left</strong>
+                                    </td>
+                                    <td class="text-right" style="border:1px solid #000;">
+                                        <span t-esc="'%.2f' % (total_amount - amount_paid)"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <!-- Accountant & Incharge Signatures -->
+                        <div class="row" style="margin-top:40px; font-size:16px;">
+
+                            <!-- Accountant -->
+                            <div class="col-6" style="text-align:center;">
+                                <div style="width:50%; margin:auto; border-bottom:1px solid black; height:25px;"></div>
+                                <div style="margin-top:5px; font-weight:bold;">
+                                    Accountant Signature
+                                </div>
+                            </div>
+
+                            <!-- Incharge -->
+                            <div class="col-6" style="text-align:center;">
+                                <div style="width:50%; margin:auto; border-bottom:1px solid black; height:25px;"></div>
+                                <div style="margin-top:5px; font-weight:bold;">
+                                    Incharge Signature
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

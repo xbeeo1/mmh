@@ -100,8 +100,8 @@
         </record>
 
 
-        <menuitem name="Outsourced Lab Request" id="menu_outsourced_lab_request"
-            parent="basic_hms.menu_lab_requests" action="action_outsourced_lab_request"
-            sequence="2" />
+<!--        <menuitem name="Outsourced Lab Request" id="menu_outsourced_lab_request"-->
+<!--            parent="basic_hms.menu_lab_requests" action="action_outsourced_lab_request"-->
+<!--            sequence="2" />-->
 
 </odoo>

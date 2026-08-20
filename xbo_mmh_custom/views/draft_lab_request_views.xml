@@ -17,8 +17,17 @@
             </xpath>
 
             <xpath expr="//field[@name='invoice_to_insurer']" position="replace">
-                <field name="outsourced_lab_request" />
+<!--                <field name="outsourced_lab_request" />-->
                 <field name="partner_lab_id"  invisible ="outsourced_lab_request !=  True" required="outsourced_lab_request == True"/>
+            </xpath>
+
+            <xpath expr="//sheet" position="inside">
+                <div class="oe_button_box" name="button_box">
+                    <button name="action_view_invoices" type="object" class="oe_stat_button"
+                            icon="fa-list">
+                        <field name="invoice_count" widget="statinfo" string="Invoice"/>
+                    </button>
+                </div>
             </xpath>
 
 
@@ -42,6 +51,10 @@
 
 
         </field>
+    </record>
+
+    <record id="basic_hms.action_medical_patient_lab_test_draft" model="ir.actions.act_window">
+        <field name="domain">[]</field>
     </record>
 
 

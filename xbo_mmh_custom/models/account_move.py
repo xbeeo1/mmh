@@ -12,6 +12,7 @@ class AccountMoveInherit(models.Model):
     partner_mobile = fields.Char(string="Mobile", related='partner_id.phone', store=True)
     department_id = fields.Many2one("hr.department", string="Department")
     patient_type_id = fields.Many2one("patient.type", string="Patient Type")
+    mr_number = fields.Char(string="MR Number")
     doctor_id = fields.Many2one("res.partner", string="Doctor")
     employee_id = fields.Many2one("hr.employee", string="Invoice Created By")
     outsourced_lab_request = fields.Boolean(string="Outsourced Lab Request")

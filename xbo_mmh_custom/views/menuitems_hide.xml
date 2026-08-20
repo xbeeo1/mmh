@@ -1,0 +1,15 @@
+<odoo>
+    <record id="basic_hms.sub_menu_today_draft_req" model="ir.ui.menu">
+        <field name="active">False</field>
+    </record>
+    <record id="basic_hms.menu_lab_requests" model="ir.ui.menu">
+        <field name="active">False</field>
+    </record>
+    <record id="basic_hms.sub_menu_draft_req" model="ir.ui.menu">
+        <field name="sequence">0</field>
+        <field name="parent_id" ref="basic_hms.main_menu_laboratory"/>
+    </record>
+    <record id="basic_hms.menu_lab_test_result" model="ir.ui.menu">
+        <field name="sequence">1</field>
+    </record>
+</odoo>

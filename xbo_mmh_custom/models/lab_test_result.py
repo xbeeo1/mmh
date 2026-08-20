@@ -9,16 +9,31 @@ class MedicalLabInherit(models.Model):
     _description = 'medical.lab Inherit'
 
     invoice_count = fields.Integer(string="Journal Entries", compute='_invoice_total')
-    amount_invoice = fields.Float(string="Amount", compute='_invoice_total')
+    amount_invoice = fields.Float(string="Amount", compute='_invoice_total', group_operator="sum", store=True)
     patient_type_id = fields.Many2one("patient.type", string="Patient Type", related='patient_id.patient_id.patient_type_id', store=True)
     patient_mobile = fields.Char(string="Mobile", related='patient_id.patient_mobile', store=True)
     patient_cnic = fields.Char(string="CNIC", related='patient_id.patient_cnic', store=True)
     mr_number = fields.Char(string="MR Number", related='patient_id.name', store=True)
     move_id = fields.Many2one("account.move", string="Invoice",)
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('confirmed', 'Confirmed'),
+        ('cancelled', 'Cancelled'),
+    ], string='Status', default='draft', tracking=True)
+
+    def action_confirm(self):
+        self.write({'state': 'confirmed'})
+
+    def action_cancel(self):
+        self.write({'state': 'cancelled'})
+
+    def action_draft(self):
+        self.write({'state': 'draft'})
 
 
     """COUNT ALL RELATED INVOICES"""
 
+    @api.depends('name', 'patient_id')
     def _invoice_total(self):
         for rec in self:
             invoice_count = rec.env['account.move'].search_count([('partner_id', '=', rec.patient_id.patient_id.id), ('invoice_origin', 'ilike', rec.name)])

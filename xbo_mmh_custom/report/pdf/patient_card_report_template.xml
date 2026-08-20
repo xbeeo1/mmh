@@ -6,9 +6,9 @@
             <div class="d-flex" style="margin:0; padding:0; align-items:flex-start;">
                 <div style="width:100%; margin:0; padding:0;">
                     <img
-                         t-att-src="'/xbo_mmh_custom/static/images/mmh_logo.png'"
-                         style="width:100%; height:190px; object-fit:contain; display:block; margin-top:-10px;"
-                         alt="Logo"/>
+                            t-att-src="'/xbo_mmh_custom/static/images/mmh_logo.png'"
+                            style="width:100%; height:190px; object-fit:contain; display:block; margin-top:-10px;"
+                            alt="Logo"/>
                 </div>
             </div>
         </div>
@@ -41,7 +41,9 @@
             </t>
         </t>
 
-        <t t-call="xbo_mmh_custom.custom_patient_external_layout_striped"><t t-out="0"/></t>
+        <t t-call="xbo_mmh_custom.custom_patient_external_layout_striped">
+            <t t-out="0"/>
+        </t>
 
     </template>
 
@@ -51,57 +53,70 @@
                 <t t-call="xbo_mmh_custom.custom_patient_external_layout">
                     <t t-set="company" t-value="res_company"/>
                     <t t-set="partner" t-value="res_partner"/>
-                    <div class="page" style="font-size:15px;margin-top:0px; padding-top:0px;" >
-<!--                            <center>-->
+                    <div class="page" style="font-size:15px;margin-top:0px; padding-top:0px;">
+                        <!--                            <center>-->
                         <div>
                             <b>Date:</b>
-                            <span style="font-size:16px;" t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d')"/>
+                            <span style="font-size:16px;"
+                                  t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d')"/>
                             <span style="padding-left: 30px;">
                                 <b>Time:</b>
-                                <span style="font-size:16px;" t-esc="context_timestamp(datetime.datetime.now()).strftime('%H:%M:%S')"/>
+                                <span style="font-size:16px;"
+                                      t-esc="context_timestamp(datetime.datetime.now()).strftime('%H:%M:%S')"/>
                             </span>
                             <span style="padding-left: 30px;">
                                 <b>Doctor Name:</b>
-                                <span style="font-size:16px;" t-field='o.primary_care_physician_id.partner_id.name'/> <!-- Assuming doctor_name is a variable passed in context -->
+                                <span style="font-size:16px;"
+                                      t-field='o.primary_care_physician_id.partner_id.name'/> <!-- Assuming doctor_name is a variable passed in context -->
                             </span>
                             <span style="padding-left: 120px;">
                                 <b>Department:</b>
                                 <t t-if="o.primary_care_physician_id.partner_id.department_id">
-                                    <span style="font-size:16px;" t-field='o.primary_care_physician_id.partner_id.department_id.name'/>
+                                    <span style="font-size:16px;"
+                                          t-field='o.primary_care_physician_id.partner_id.department_id.name'/>
                                 </t>
                             </span>
-                             <!-- Assuming token_no is a variable passed in context -->
+                            <!-- Assuming token_no is a variable passed in context -->
                         </div>
 
-<!--                            </center>-->
+                        <!--                            </center>-->
 
-                        <table class="table borderless">
+                        <table class="table borderless" style="width:100%; font-size:12px;">
                             <tr>
-                                <td style="width:34%">
-                                    <div class="box"><b>Patient ID:</b>
-                                        <span t-field='o.name' /></div>
+                                <td style="width:34%; padding:2px 4px;">
+                                    <div class="box">
+                                        <b>MR No.:</b>
+                                        <span t-field='o.name'/>
+                                    </div>
                                 </td>
-
-                                <td style="width:33%">
-                                    <div class="box"><b>Name:</b>
-                                                <span t-field='o.patient_id.name' /></div>
+                                <td style="width:33%; padding:2px 4px;">
+                                    <div class="box">
+                                        <b>Name:</b>
+                                        <span t-field='o.patient_id.name'/>
+                                    </div>
                                 </td>
-                                <td style="width:33%">
-                                    <div class="box"><b>CNIC:</b>
-                                                <span t-field='o.patient_id.patient_cnic' /></div>
+                                <td style="width:33%; padding:2px 4px;">
+                                    <div class="box">
+                                        <b>CNIC:</b>
+                                        <span t-field='o.patient_id.patient_cnic'/>
+                                    </div>
                                 </td>
                             </tr>
 
                             <tr>
-                                <td style="width:34%">
-                                    <div class="box"><b>Gender:</b>
-                                                <span t-field='o.sex' /></div>
+                                <td style="width:34%; padding:2px 4px;">
+                                    <div class="box">
+                                        <b>Gender:</b>
+                                        <span t-field='o.sex'/>
+                                    </div>
                                 </td>
-                                 <td style="width:33%">
-                                    <div class="box"><b>Age:</b>
-                                                <span t-field='o.age'/></div>
+                                <td style="width:33%; padding:2px 4px;">
+                                    <div class="box">
+                                        <b>Age:</b>
+                                        <span t-field='o.age'/>
+                                    </div>
                                 </td>
-                                <td style="width:33%">
+                                <td style="width:33%; padding:2px 4px;">
                                     <div class="box">
                                         <b>Patient Type :</b>
                                         <t t-if="o.medical_patient_type_id.name != 'MMH'">
@@ -114,27 +129,26 @@
                                 </td>
                             </tr>
 
-
                             <tr>
-                                <td style="width:33%">
-                                    <div class="box"><b>Phone:</b>
-                                                <span t-field='o.patient_id.phone' />
+                                <td style="width:33%; padding:2px 4px;">
+                                    <div class="box">
+                                        <b>Phone:</b>
+                                        <span t-field='o.patient_id.phone'/>
                                     </div>
                                 </td>
-
-                                <td style="width:34%">
-                                    <div class="box"><b>Treatment Type:</b>
-                                        <span t-field='o.treatment_type_id.name' />
+                                <td style="width:34%; padding:2px 4px;">
+                                    <div class="box">
+                                        <b>Treatment Type:</b>
+                                        <span t-field='o.treatment_type_id.name'/>
                                     </div>
                                 </td>
-                                <td style="width:34%">
-                                    <div class="box"><b>Address:</b>
-                                        <span t-field='o.village_id.name' />
+                                <td style="width:34%; padding:2px 4px;">
+                                    <div class="box">
+                                        <b>Address:</b>
+                                        <span t-field='o.village_id.name'/>
                                     </div>
                                 </td>
                             </tr>
-
-
                         </table>
                         <div style="font-size:16px;">
                             <b>Symptoms:</b>
@@ -155,14 +169,17 @@
                         <div style="border: 0; border-top: 2px solid black; width: 100%;"></div>
                         <div class="col-6">
                             <div class="row">
-                                <div class="col-4" style="margin-top:30px;" >
-                                    <span style="font-size:18px;font-weight:bold; text-decoration: underline;">Vitals:</span>
+                                <div class="col-4" style="margin-top:30px;">
+                                    <span style="font-size:18px;font-weight:bold; text-decoration: underline;">Vitals:
+                                    </span>
                                     <div style="margin-top:7px;font-size:17px;">B.P:</div>
                                     <div style="margin-top:7px;font-size:17px;">Temp:</div>
                                     <div style="margin-top:7px;font-size:17px;">P.R:</div>
                                     <div style="margin-top:7px;font-size:17px;">R.R:</div>
                                     <div style="margin-top:7px;font-size:17px;">Weight:</div>
-                                    <div style="font-size:18px; padding-top: 30px; margin-top:30px;font-weight:bold;text-decoration: underline;" >Advised:</div>
+                                    <div style="font-size:18px; padding-top: 30px; margin-top:30px;font-weight:bold;text-decoration: underline;">
+                                        Advised:
+                                    </div>
 
                                 </div>
                                 <div class="col-1" style="border-left: 2px solid black; height: 560px;"/>
@@ -180,9 +197,11 @@
                                 <div class="col-10">
                                 </div>
                                 <div class="col-2">
-                                    <span style="font-size:17px;" >Signature/Stamp</span><br/>
-                                    <span style="font-size:17px;" >Date:</span><br/>
-                                    <span style="font-size:17px;" >Time:</span>
+                                    <span style="font-size:17px;">Signature/Stamp</span>
+                                    <br/>
+                                    <span style="font-size:17px;">Date:</span>
+                                    <br/>
+                                    <span style="font-size:17px;">Time:</span>
                                 </div>
 
                             </div>

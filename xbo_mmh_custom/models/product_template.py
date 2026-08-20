@@ -38,6 +38,16 @@ class ProductTemplateInheritFRM(models.Model):
         required=True,
         default='consu',
         tracking=True)
+    margin_percentage = fields.Float(
+        string='Margin %',default=5.0,
+    )
+
+    @api.onchange('margin_percentage','standard_price')
+    def _onchange_margin_percentage(self):
+        for rec in self:
+            if rec.standard_price and rec.margin_percentage:
+                margin_amount = rec.standard_price * (rec.margin_percentage / 100)
+                rec.list_price = rec.standard_price + margin_amount
 
     @tools.ormcache()
     def _get_default_category_id(self):

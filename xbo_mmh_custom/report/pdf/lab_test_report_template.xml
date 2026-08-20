@@ -6,9 +6,9 @@
             <div class="d-flex" style="margin:0; padding:0; align-items:flex-start;">
                 <div style="width:100%; margin:0; padding:0;">
                     <img
-                         t-att-src="'/xbo_mmh_custom/static/images/mmh_logo.png'"
-                         style="width:100%; height:190px; object-fit:contain; display:block; margin-top:-10px;"
-                         alt="Logo"/>
+                            t-att-src="'/xbo_mmh_custom/static/images/mmh_logo.png'"
+                            style="width:100%; height:190px; object-fit:contain; display:block; margin-top:-10px;"
+                            alt="Logo"/>
                 </div>
             </div>
         </div>
@@ -28,8 +28,8 @@
                 <t t-set="designations" t-value="['Lab Technician', 'Technologist', 'Pathologist']"/>
                 <t t-set="seq" t-value="1"/>
                 <t t-foreach="designations" t-as="designation">
-                     <t t-set="signatories"
-                   t-value="request.env['report.signatory'].search([('sequence','=',seq)])"/>
+                    <t t-set="signatories"
+                       t-value="request.env['report.signatory'].search([('sequence','=',seq)])"/>
                     <div class="col-4 text-center" style="border:2px solid #000000;">
                         <div style="font-weight:700;font-size:17px;">
                             <b>
@@ -51,11 +51,15 @@
 
             <div class="text-center">
                 <span>
-                   Computer generated Lab Report and will not needed for signature
+                    Computer generated Lab Report and will not needed for signature
                 </span>
             </div>
             <div class="o_footer_content border-top pt-2 text-center">
-                <div t-if="report_type == 'pdf'" style="font-size:10px;" class="text-muted">Page <span class="page"/> / <span class="topage"/></div>
+                <div t-if="report_type == 'pdf'" style="font-size:10px;" class="text-muted">Page
+                    <span class="page"/>
+                    /
+                    <span class="topage"/>
+                </div>
             </div>
         </div>
     </template>
@@ -75,11 +79,14 @@
                 <t t-set="company" t-value="res_company"/>
             </t>
         </t>
-        <t t-call="xbo_mmh_custom.custom_lab_external_layout_striped"><t t-out="0"/></t>
+        <t t-call="xbo_mmh_custom.custom_lab_external_layout_striped">
+            <t t-out="0"/>
+        </t>
 
     </template>
 
-    <template id="medical_view_report_lab_result_demo_report_inherit" inherit_id="basic_hms.medical_view_report_lab_result_demo_report">
+    <template id="medical_view_report_lab_result_demo_report_inherit"
+              inherit_id="basic_hms.medical_view_report_lab_result_demo_report">
         <xpath expr="." position="replace">
             <t t-call="xbo_mmh_custom.custom_lab_external_layout">
                 <div class="page">
@@ -89,70 +96,99 @@
                             <strong style="background-color: #F2F2F2;">LABORATORY REPORT</strong>
                         </h3>
                     </div>
-                    <table class="table table-condensed">
+                    <table class="table table-condensed" style="width:100%; font-size:12px;">
                         <tr>
-                            <th style="border: 0px ;" class="text-left"><b>Test ID:</b>
+                            <th style="border: 0px ;padding:2px 4px;" class="text-left">
+                                <b>Test ID:</b>
                                 <span style="font-weight:normal;" t-field="doc.name"/>
                             </th>
 
-                            <th style="border: 0px ;" class="text-left"><b>Patient ID:</b>
+                            <th style="border: 0px ;padding:2px 4px;" class="text-left">
+                                <b>Patient ID:</b>
                                 <span style="font-weight:normal;" t-field="doc.patient_id.name"/>
                             </th>
 
 
-
-                            <th style="border: 0px ;" class="text-left"><b>Contact No:</b>
+                            <th style="border: 0px ;padding:2px 4px;" class="text-left">
+                                <b>Contact No:</b>
                                 <span style="font-weight:normal;" t-field="doc.patient_id.patient_mobile"/>
                             </th>
                         </tr>
                         <tr>
-                            <th style="border: 0px ;" class="text-left"><b>Name:</b>
+                            <th style="border: 0px ;padding:2px 4px;" class="text-left">
+                                <b>Name:</b>
                                 <span style="font-weight:normal;" t-field="doc.patient_id.patient_id.name"/>
                             </th>
 
-                            <th style="border: 0px ;" class="text-left"><b>Age:</b>
+                            <th style="border: 0px ;padding:2px 4px;" class="text-left">
+                                <b>Age:</b>
                                 <span style="font-weight:normal;" t-field="doc.patient_id.age"/>
                             </th>
 
 
-
-                            <th style="border: 0px ;" class="text-left"><b>Gender:</b>
+                            <th style="border: 0px ;padding:2px 4px;" class="text-left">
+                                <b>Gender:</b>
                                 <span style="font-weight:normal;" t-field="doc.patient_id.sex"/>
                             </th>
                         </tr>
 
                         <tr>
-                            <th style="border: 0px ;" class="text-left"><b>S/D/W:</b>
+                            <th style="border: 0px ;padding:2px 4px;" class="text-left">
+                                <b>S/D/W:</b>
                                 <span style="font-weight:normal;" t-field="doc.patient_id.patient_id.father_name"/>
                             </th>
 
-                            <th style="border: 0px ;" class="text-left"><b>Address:</b>
+                            <th style="border: 0px ;padding:2px 4px;" class="text-left">
+                                <b>Address:</b>
                                 <span style="font-weight:normal;" t-field="doc.patient_id.village_id.name"/>
                             </th>
 
 
-
-                            <th style="border: 0px ;" class="text-left"><b>Referred By:</b>
+                            <th style="border: 0px ;padding:2px 4px;" class="text-left">
+                                <b>Referred By:</b>
                                 <span style="font-weight:normal;" t-field="doc.requestor_physician_id.partner_id.name"/>
                             </th>
                         </tr>
 
                         <tr>
-                            <th rowspan="2" style="border: 0px ;line-height: 1.2;" class="text-left"><b>Care <br/> of:</b>
+                            <th style="border: 0px ;padding:2px 4px;line-height: 1.2;" class="text-left">
+                                <b>Care
+                                    <br/>
+                                    of:
+                                </b>
                                 <span style="font-weight:normal;" t-field="doc.patient_type_id.name"/>
                             </th>
 
 
-
-                            <th rowspan="2" style="border: 0px ;line-height: 1.2;" class="text-left"><b>Collection <br/> Date/Time:</b>
+                            <th style="border: 0px ;padding:2px 4px;line-height: 1.2;" class="text-left">
+                                <b>Collection
+                                    <br/>
+                                    Date/Time:
+                                </b>
                                 <t t-if="doc.date_requested">
-                                    <span style="font-weight:normal;" t-esc="doc.get_adjusted_date_requested().strftime('%d-%m-%Y %H:%M:%S')"/>
+                                    <span style="font-weight:normal;"
+                                          t-esc="doc.get_adjusted_date_requested().strftime('%d-%m-%Y %H:%M:%S')"/>
                                 </t>
                             </th>
-                            <th rowspan="2" style="border: 0px ;line-height: 1.2;" class="text-left"><b>Printed <br/> Date/Time:</b>
+                            <th style="border: 0px ;padding:2px 4px;line-height: 1.2;" class="text-left">
+                                <b>Printed
+                                    <br/>
+                                    Date/Time:
+                                </b>
                                 <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %H:%M:%S')"/>
                             </th>
 
+                        </tr>
+                        <tr>
+                            <th style="border: 0px ;padding:2px 4px;line-height: 1.2;" class="text-left">
+                                <b>Reported
+                                    <br/>
+                                    Time:
+                                </b>
+                                <span style="font-weight:normal;" t-field="doc.date_analysis"/>
+                            </th>
+                            <th style="border: 0px ;padding:2px 4px;"></th>
+                            <th style="border: 0px ;padding:2px 4px;"></th>
                         </tr>
                     </table>
                     <div class="row">
@@ -170,7 +206,8 @@
                         <t t-set="prev1" t-value="records[1] if len(records) > 1 else None"/>
                         <t t-set="prev2" t-value="records[2] if len(records) > 2 else None"/>
 
-                        <t t-set="current_date" t-value="current.date_requested.strftime('%d-%m-%Y') if current else ''"/>
+                        <t t-set="current_date"
+                           t-value="current.date_requested.strftime('%d-%m-%Y') if current else ''"/>
                         <t t-set="prev1_date" t-value="prev1.date_requested.strftime('%d-%m-%Y') if prev1 else ''"/>
                         <t t-set="prev2_date" t-value="prev2.date_requested.strftime('%d-%m-%Y') if prev2 else ''"/>
                         <table style="width:100%; border :1px solid;">
@@ -192,7 +229,7 @@
                                     <th style="border-right: 1px solid black;">
                                         Result (<t t-esc="current_date or ''"/>)
                                     </th>
-<!--                                    <th style="border-right: 1px solid black;">Result</th>-->
+                                    <!--                                    <th style="border-right: 1px solid black;">Result</th>-->
                                     <th style="border-right: 1px solid black;">Normal Range</th>
                                     <th style="border-right: 1px solid black;">Units</th>
                                 </tr>
@@ -229,23 +266,25 @@
                         </table>
                     </div>
                     <b/>
-                    <div style="margin-top:20px;" >
-                        <b>Remarks:</b><br/>
+                    <div style="margin-top:20px;">
+                        <b>Remarks:</b>
+                        <br/>
                         <span style="font-weight:normal;margin-left:60px;" t-field="doc.results"/>
                     </div>
                     <hr/>
-                    <div style="margin-top:20px;" >
-                        <b>Diagnosis:</b><br/>
+                    <div style="margin-top:20px;">
+                        <b>Diagnosis:</b>
+                        <br/>
                         <span style="font-weight:normal;margin-left:60px;" t-field="doc.diagnosis"/>
                     </div>
                     <b/>
-<!--                    <div class="row" id="informations" style="position: absolute; bottom: 0; width: 100%; margin-bottom: 20px;">-->
-<!--                        <div class="text-center">-->
-<!--                            <span>This is electronically verified report doesn't required sign &amp; Stamp.-->
-<!--                                Not valid for Court-->
-<!--                            </span>-->
-<!--                        </div>-->
-<!--                    </div>-->
+                    <!--                    <div class="row" id="informations" style="position: absolute; bottom: 0; width: 100%; margin-bottom: 20px;">-->
+                    <!--                        <div class="text-center">-->
+                    <!--                            <span>This is electronically verified report doesn't required sign &amp; Stamp.-->
+                    <!--                                Not valid for Court-->
+                    <!--                            </span>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
                     <div class="oe_structure"/>
                 </div>
             </t>

@@ -8,6 +8,9 @@ import calendar
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 
+from odoo.orm.decorators import readonly
+
+
 class MedicalPatientInherit(models.Model):
     _inherit = 'medical.patient'
 
@@ -18,12 +21,31 @@ class MedicalPatientInherit(models.Model):
     medical_patient_type_id = fields.Many2one("patient.type",related='patient_id.patient_type_id',store=True, string="Patient Type")
     department_id = fields.Many2one("hr.department", string="Department")
 
-    treatment_fees = fields.Float(string="Treatment Fees", compute='_compute_doctor_treatment_fees')
+    treatment_fees = fields.Float(string="Treatment Fees", compute='_compute_doctor_treatment_fees', store=True, readonly=False)
 
     prescription_count = fields.Integer(string="Prescriptions", compute='_prescription_total')
     invoice_count = fields.Integer(string="Invoice", compute='_invoices_total')
 
 
+    @api.depends("name", "patient_id.name", "patient_id.phone", "patient_id.patient_cnic")
+    def _compute_display_name(self):
+        for patient in self:
+            parts = []
+
+            if patient.name:
+                parts.append(patient.name)
+
+            if patient.patient_id:
+                if patient.patient_id.name:
+                    parts.append(patient.patient_id.name)
+
+                if patient.patient_id.phone:
+                    parts.append(patient.patient_id.phone)
+
+                if patient.patient_id.patient_cnic:
+                    parts.append(patient.patient_id.patient_cnic)
+
+            patient.display_name = " - ".join(parts)
 
     @api.model
     def name_search(self, name='', args=None, operator='ilike', limit=100):
@@ -162,3 +184,13 @@ class MedicalPatientInherit(models.Model):
                 'default_patient_id_name': patient.name,
             },
         }
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super(MedicalPatientInherit, self).create(vals_list)
+
+        for record in records:
+            if record.patient_id and record.name:
+                record.patient_id.mr_number = record.name
+
+        return records

@@ -31,6 +31,7 @@ class create_prescription_invoice_inherit(models.TransientModel):
                 'doctor_id': lab_req.patient_id.primary_care_physician_id.partner_id.id or False,
                 'move_type': 'out_invoice',
                 'ref': False,
+                'mr_number': lab_req.patient_id.name,
                 'partner_id': lab_req.patient_id.patient_id.id,
                 'invoice_date': date.today(),
                 'partner_shipping_id': lab_req.patient_id.patient_id.id,

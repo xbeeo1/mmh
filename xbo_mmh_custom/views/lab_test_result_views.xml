@@ -7,14 +7,22 @@
         <field name="inherit_id" ref="basic_hms.medical_lab_tree_view"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='date_analysis']" position="after">
-                <field name="amount_invoice"/>
+                <field name="amount_invoice" sum="Total"/>
             </xpath>
             <xpath expr="//field[@name='patient_id']" position="after">
-                <field name="patient_type_id" invisible="1"/>
+                <field name="patient_type_id" invisible="0"/>
+            </xpath>
+
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="mr_number"/>
+            </xpath>
+
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="string">No.</attribute>
             </xpath>
 
             <xpath expr="//field[@name='date_analysis']" position="replace">
-                <field name="date_requested" />
+                <field name="date_requested"/>
             </xpath>
 
         </field>
@@ -26,26 +34,55 @@
         <field name="model">medical.lab</field>
         <field name="inherit_id" ref="basic_hms.medical_lab_form_view"/>
         <field name="arch" type="xml">
+            <xpath expr="//header/button" position="replace">
+                <button name="action_confirm" string="Confirm" type="object"
+                        class="oe_highlight" invisible="state != 'draft'"/>
+                <button name="action_cancel" string="Cancel" type="object"
+                        invisible="state != 'draft'"/>
+
+                <button name="action_cancel" string="Cancel" type="object"
+                        invisible="state != 'confirmed'"/>
+                <button name="action_draft" string="Reset to Draft" type="object"
+                        invisible="state != 'confirmed'"/>
+                <button name="%(basic_hms.action_create_lab_invoice2)d"
+                        string="Create Lab Invoice" type="action"
+                        class="oe_highlight" invisible="1"/>
+
+                <button name="action_draft" string="Reset to Draft" type="object"
+                        invisible="state != 'cancelled'"/>
+            </xpath>
+
+            <xpath expr="//header" position="inside">
+                <field name="state" widget="statusbar" statusbar_visible="draft,confirmed"/>
+            </xpath>
+
             <xpath expr="//field[@name='date_analysis']" position="after">
                 <field name="amount_invoice" invisible="1"/>
             </xpath>
+
             <xpath expr="//field[@name='patient_id']" position="after">
                 <field name="patient_type_id" invisible="0"/>
+                <field name="mr_number"/>
             </xpath>
-            <xpath expr="//sheet" position="inside">
-                <div class="oe_button_box" name="button_box">
-                    <button name="action_view_invoices" type="object" class="oe_stat_button"
-                                icon="fa-list">
-                            <field name="invoice_count" widget="statinfo" string="Invoice"/>
-                        </button>
-                </div>
+
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="string">No.</attribute>
             </xpath>
+
+<!--            <xpath expr="//sheet" position="inside">-->
+<!--                <div class="oe_button_box" name="button_box">-->
+<!--                    <button name="action_view_invoices" type="object" class="oe_stat_button"-->
+<!--                            icon="fa-list">-->
+<!--                        <field name="invoice_count" widget="statinfo" string="Invoice"/>-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--            </xpath>-->
         </field>
     </record>
 
     <record id="medical_lab_form_view_search" model="ir.ui.view">
-    <field name="name">medical.lab.search</field>
-    <field name="model">medical.lab</field>
+        <field name="name">medical.lab.search</field>
+        <field name="model">medical.lab</field>
         <field name="arch" type="xml">
             <search string="Search Patient">
                 <field name="test_id"/>
@@ -65,12 +102,11 @@
                     <filter string="Patient" name='patient_id' context="{'group_by':'patient_id'}"/>
                     <filter string="Patient Type" name='patient_type_id' context="{'group_by':'patient_type_id'}"/>
                     <filter string="Date Analysis" name='date_analysis' context="{'group_by':'date_analysis'}"/>
+                    <filter string="MR Number" name="mr_number" context="{'group_by': 'mr_number'}"/>
                 </group>
             </search>
         </field>
     </record>
-
-
 
 
 </odoo>

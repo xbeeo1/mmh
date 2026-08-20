@@ -36,9 +36,9 @@
             <xpath expr="//sheet" position="inside">
                 <div class="oe_button_box" name="button_box">
                     <button name="action_view_invoices" type="object" class="oe_stat_button"
-                                icon="fa-list">
-                            <field name="invoice_count" widget="statinfo" string="Invoice"/>
-                        </button>
+                            icon="fa-list">
+                        <field name="invoice_count" widget="statinfo" string="Invoice"/>
+                    </button>
                 </div>
             </xpath>
 
@@ -47,16 +47,31 @@
             </xpath>
 
             <xpath expr="//button[@name='%(basic_hms.action_create_prescription_invoice1)d']" position="after">
-                <button name="action_create_prescription_invoice"  type="object" string="Create Invoice" class="btn-primary" data-hotkey="q"/>
+                <button name="action_create_prescription_invoice" type="object" string="Create Invoice"
+                        class="btn-primary" data-hotkey="q"/>
             </xpath>
 
 
-
-             <xpath expr="//header" position="inside">
+            <xpath expr="//header" position="inside">
                 <button name="action_print_patient_card"
                         type="object"
                         string="Print Patient Card"
                         class="btn-primary"/>
+            </xpath>
+            <xpath expr="//field[@name='prescription_line_ids']/parent::group" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='notes']/parent::group" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='prescription_report']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='invoice_to_insurer']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//sheet" position="after">
+                <chatter/>
             </xpath>
 
 
@@ -65,25 +80,27 @@
 
 
     <record id="medical_prescription_order_search_view_inherit" model="ir.ui.view">
-    <field name="name">medical.prescription.order.search</field>
+        <field name="name">medical.prescription.order.search</field>
         <field name="model">medical.prescription.order</field>
         <field name="inherit_id" ref="basic_hms.medical_prescription_order_search_view"/>
         <field name="arch" type="xml">
-             <xpath expr="//field[@name='pharmacy_partner_id']" position="before">
+            <xpath expr="//field[@name='pharmacy_partner_id']" position="before">
                 <field name="user_id"/>
                 <field name="doctor_id"/>
                 <field name="patient_type_id"/>
-                 <separator/>
+                <separator/>
                 <filter string="Login User" name="user_id" domain="[('user_id', '!=', False)]"/>
                 <filter string="Patient" name="patient_id" domain="[('patient_id', '!=', False)]"/>
                 <filter string="Patient Type" name="patient_type_id" domain="[('patient_type_id', '!=', False)]"/>
-                <filter string="Prescription Date" name="prescription_date" domain="[('prescription_date', '!=', False)]"/>
+                <filter string="Prescription Date" name="prescription_date"
+                        domain="[('prescription_date', '!=', False)]"/>
                 <filter string="Prescribing Doctor" name="doctor_id" domain="[('doctor_id', '!=', False)]"/>
-                <group >
+                <group>
                     <filter string="Login User" name='user_id' context="{'group_by':'user_id'}"/>
                     <filter string="Patient" name='patient_id' context="{'group_by':'patient_id'}"/>
                     <filter string="Patient Type" name='patient_type_id' context="{'group_by':'patient_type_id'}"/>
-                    <filter string="Prescription Date" name='prescription_date' context="{'group_by':'prescription_date'}"/>
+                    <filter string="Prescription Date" name='prescription_date'
+                            context="{'group_by':'prescription_date'}"/>
                     <filter string="Prescribing Doctor" name='doctor_id' context="{'group_by':'doctor_id'}"/>
                 </group>
             </xpath>
@@ -99,8 +116,6 @@
         <field name="report_file">basic_hms.report_patient_card</field>
         <field name="binding_type">report</field>
     </record>
-
-
 
 
 </odoo>

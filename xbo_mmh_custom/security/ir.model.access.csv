@@ -17,3 +17,5 @@ access_partner_lab,partner.lab,model_partner_lab,base.group_user,1,1,1,1
 access_outsourced_lab_request,outsourced.lab.request,model_outsourced_lab_request,base.group_user,1,1,1,1
 access_outsourced_lab_test_line,outsourced.lab.test.line,model_outsourced_lab_test_line,base.group_user,1,1,1,1
 access_report_signatory_user,access.report.signatory.user,model_report_signatory,,1,1,1,1
+access_result_text_user,result.text.user,model_result_text,base.group_user,1,1,1,1
+access_discharge_slip_wizard,discharge.slip.wizard,model_discharge_slip_wizard,base.group_user,1,1,1,1

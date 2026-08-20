@@ -14,6 +14,7 @@ class ResPartnerInherit(models.Model):
     department_id = fields.Many2one("hr.department", string="Department")
     village_id = fields.Many2one("patient.village", string="Village")
     patient_cnic = fields.Char(string="CNIC", required=True)
+    cnic_duplicate_confirmed = fields.Boolean(string="Confirm Duplicate CNIC", default=False)
     father_name = fields.Char(string="Father Name")
     sex = fields.Selection([('m', 'Male'), ('f', 'Female')], string="Sex")
     marital_status = fields.Selection([('s', 'Single'),
@@ -24,11 +25,25 @@ class ResPartnerInherit(models.Model):
 
     primary_care_physician_id = fields.Many2one('medical.physician', string="Primary Care Doctor")
 
-    sector_type = fields.Selection(string="Sector Type", selection=[('private', 'Private'), ('govt', 'Govt')])
+    sector_type = fields.Selection(string="Sector Type", selection=[('private', 'Private'), ('govt', 'Govt'), ('na', 'N/A')])
     licence_number = fields.Char(string="Licence Number")
     licence_validity_date = fields.Date(string="Licence Validity Date")
     licence_status = fields.Selection(string="Licence Status", selection=[('active', 'Active'), ('expired', 'Expired')])
     is_renewal = fields.Boolean(string="Is Renewal")
+    mr_number = fields.Char(string="MR Number")
+
+    @api.onchange('patient_cnic')
+    def _onchange_patient_cnic(self):
+        self.cnic_duplicate_confirmed = False
+        if self.patient_cnic:
+            existing = self.search([('patient_cnic', '=', self.patient_cnic)], limit=1)
+            if existing:
+                return {
+                    'warning': {
+                        'title': "CNIC Already Exists",
+                        'message': "This CNIC already exists.\n\nTick 'Confirm Duplicate CNIC' below to save anyway, or change the CNIC / click Discard to cancel.",
+                    }
+                }
 
     """CREATE METHOD FOR VALIDATION ON DUPLICATION CNIC"""
     def create(self, vals):
@@ -44,10 +59,11 @@ class ResPartnerInherit(models.Model):
                 if ex_licence_number:
                     raise ValidationError("A customer with this Licence already Exist.")
 
-        if 'patient_cnic' in vals and vals.get('patient_cnic'):
+        if 'patient_cnic' in vals and vals.get('patient_cnic') and not vals.get('cnic_duplicate_confirmed'):
             existing_name = self.search([('patient_cnic', '=', vals['patient_cnic'])], limit=1)
             if existing_name:
-                raise ValidationError("Patient CINC Already Exist.")
+                raise ValidationError(
+                    "Patient CNIC Already Exists.\n\nTick 'Confirm Duplicate CNIC' checkbox to save anyway.")
 
         if 'patient_type_id' in vals and vals.get('patient_type_id'):
             patient_type = self.env['patient.type'].browse(

@@ -23,8 +23,9 @@
                 <field name="partner_mobile" invisible="1"/>
                 <field name="department_id" invisible="0" readonly="1"/>
                 <field name="patient_type_id" invisible="0" readonly="1"/>
+                <field name="mr_number" invisible="0" readonly="1"/>
                 <field name="doctor_id" invisible="0" readonly="1"/>
-                <field name="outsourced_lab_request" invisible="0" readonly="1"/>
+                <field name="outsourced_lab_request" invisible="1" readonly="1"/>
                  <field name="licence_status" readonly="1"/>
             </xpath>
             <xpath expr="//div[@name='journal_div']" position="after">

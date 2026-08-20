@@ -6,7 +6,8 @@ from datetime import date,datetime
 from odoo.exceptions import ValidationError
 
 class MedicalPrescriptionOrderInherit(models.Model):
-    _inherit = "medical.prescription.order"
+    _name = 'medical.prescription.order'
+    _inherit = ['medical.prescription.order', 'mail.thread', 'mail.activity.mixin']
     _description = 'medical Prescription order'
 
 
@@ -68,26 +69,21 @@ class MedicalPrescriptionOrderInherit(models.Model):
             #             self.treatment_fees = tl.treatment_fees
             self.treatment_fees = rate_id.treatment_fees
 
-
-
     def action_create_prescription_invoice(self):
-        move_lines = []
-        for line in self.prescription_line_ids:
-            move_lines.append(Command.create({
-                'product_id': line.medicament_id.product_id.id,
-                'name': line.medicament_id.product_id.display_name or '',
-                'quantity': line.quantity,
-                'price_unit': self.treatment_fees if line.medicament_id.product_id.is_checkup_fees and self.treatment_fees else line.medicament_id.product_id.lst_price,
-                'product_uom_id': line.medicament_id.product_id.uom_id.id,
+        checkup_product = self.env['product.product'].search(
+            [('is_checkup_fees', '=', True)], limit=1)
+        if not checkup_product:
+            raise ValidationError('Product not available')
 
-            }),
-            )
+        move_lines = [Command.create({
+            'product_id': checkup_product.id,
+            'name': checkup_product.display_name or '',
+            'quantity': 1,
+            'price_unit': self.treatment_fees,
+            'product_uom_id': checkup_product.uom_id.id,
+        })]
 
-        # print('move_lines........', move_lines)
-
-        # Create journal entry
         move = self.env['account.move'].create({
-            # 'name': self.env['ir.sequence'].next_by_code('pres_inv_seq'),
             'move_type': 'out_invoice',
             'ref': self.name,
             'invoice_origin': self.name or '',
@@ -98,8 +94,6 @@ class MedicalPrescriptionOrderInherit(models.Model):
             'patient_type_id': self.patient_id.patient_id.patient_type_id.id,
             'invoice_line_ids': move_lines,
         })
-
-        # print('move.....', move.name)
 
 
 
