@@ -16,10 +16,24 @@
                 <t t-call="xbo_mmh_custom.custom_patient_external_layout">
                     <t t-set="o" t-value="doc"/>
                     <div class="page" style="font-size:15px;margin-top:0px; padding-top:0px;">
-                        <div>
-                            <h3 class="text-center">
-                                <strong style="background-color: #F2F2F2;">Discharge Slip</strong>
-                            </h3>
+                        <div class="row" style="width:100%;">
+                            <div class="col-4"></div>
+                            <div class="col-4 text-center">
+                                <h3>
+                                    <strong style="background-color: #F2F2F2;">Discharge Slip</strong>
+                                </h3>
+                            </div>
+                            <div class="col-4 text-end" style="font-size:12px;">
+                                <t t-set="print_dt" t-value="doc._get_print_datetime()"/>
+                                <div>
+                                    <b>Print Date:</b>
+                                    <span t-esc="print_dt.strftime('%d/%m/%Y')"/>
+                                </div>
+                                <div>
+                                    <b>Print Time:</b>
+                                    <span t-esc="print_dt.strftime('%I:%M:%S %p')"/>
+                                </div>
+                            </div>
                         </div>
 
                         <table class="table borderless" style="width:100%; font-size:12px;">
@@ -104,38 +118,84 @@
                         <t t-set="amount_paid"
                            t-value="sum(paid_invoices.mapped(lambda inv: inv.amount_total - inv.amount_residual))"/>
 
-                        <table class="table table-sm mt-1" style="border:1px solid #000;">
-                            <thead>
-                                <tr style="background-color:#f2f2f2;">
-                                    <th class="text-center"  style="border:1px solid #000;">Date</th>
-                                    <th style="border:1px solid #000;">Description</th>
-                                    <th class="text-center" style="border:1px solid #000;">Qty</th>
-                                    <th class="text-end" style="border:1px solid #000;">Unit Price</th>
-                                    <th class="text-end" style="border:1px solid #000;">Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <t t-foreach="invoices.mapped('invoice_line_ids')" t-as="line">
-                                    <tr>
-                                        <td class="text-center"  style="border:1px solid #000;">
-                                            <span t-esc="line.move_id.invoice_date.strftime('%d/%m/%Y') if line.move_id.invoice_date else ''"/>
-                                        </td>
-                                        <td style="border:1px solid #000;">
-                                            <span t-esc="line.name"/>
-                                        </td>
-                                        <td class="text-center" style="border:1px solid #000;">
-                                            <span t-esc="line.quantity"/>
-                                        </td>
-                                        <td class="text-end" style="border:1px solid #000;">
-                                            <span t-esc="line.price_unit"/>
-                                        </td>
-                                        <td class="text-end" style="border:1px solid #000;">
-                                            <span t-esc="line.price_subtotal"/>
-                                        </td>
+                        <!-- Split invoices: regular (Treatment) vs POS (Medicine) -->
+                        <t t-set="regular_invoices" t-value="invoices.filtered(lambda inv: not inv.pos_order_ids)"/>
+                        <t t-set="pos_invoices" t-value="invoices.filtered(lambda inv: inv.pos_order_ids)"/>
+
+                        <!-- Table 1: Regular Invoices -->
+                        <div style="page-break-inside: avoid;">
+                            <h5 style="margin-top:10px; margin-bottom:2px;">Treatment</h5>
+                            <table class="table table-sm mt-1" style="border:1px solid #000;">
+                                <thead>
+                                    <tr style="background-color:#f2f2f2;">
+                                        <th class="text-center"  style="border:1px solid #000;">Date</th>
+                                        <th style="border:1px solid #000;">Description</th>
+                                        <th class="text-center" style="border:1px solid #000;">Qty</th>
+                                        <th class="text-end" style="border:1px solid #000;">Unit Price</th>
+                                        <th class="text-end" style="border:1px solid #000;">Amount</th>
                                     </tr>
-                                </t>
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="regular_invoices.mapped('invoice_line_ids')" t-as="line">
+                                        <tr>
+                                            <td class="text-center"  style="border:1px solid #000;">
+                                                <span t-esc="line.move_id.invoice_date.strftime('%d/%m/%Y') if line.move_id.invoice_date else ''"/>
+                                            </td>
+                                            <td style="border:1px solid #000;">
+                                                <span t-esc="line.name"/>
+                                            </td>
+                                            <td class="text-center" style="border:1px solid #000;">
+                                                <span t-esc="line.quantity"/>
+                                            </td>
+                                            <td class="text-end" style="border:1px solid #000;">
+                                                <span t-esc="'{:,.2f}'.format(line.price_unit)"/>
+                                            </td>
+                                            <td class="text-end" style="border:1px solid #000;">
+                                                <span t-esc="'{:,.2f}'.format(line.price_subtotal)"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Table 2: POS Invoices -->
+                        <div style="page-break-inside: avoid;">
+                            <h5 style="margin-top:10px; margin-bottom:2px;">Medicine</h5>
+                            <table class="table table-sm mt-1" style="border:1px solid #000;">
+                                <thead>
+                                    <tr style="background-color:#f2f2f2;">
+                                        <th class="text-center"  style="border:1px solid #000;">Date</th>
+                                        <th style="border:1px solid #000;">Description</th>
+                                        <th class="text-center" style="border:1px solid #000;">Qty</th>
+                                        <th class="text-end" style="border:1px solid #000;">Unit Price</th>
+                                        <th class="text-end" style="border:1px solid #000;">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="pos_invoices.mapped('invoice_line_ids')" t-as="line">
+                                        <tr>
+                                            <td class="text-center"  style="border:1px solid #000;">
+                                                <span t-esc="line.move_id.invoice_date.strftime('%d/%m/%Y') if line.move_id.invoice_date else ''"/>
+                                            </td>
+                                            <td style="border:1px solid #000;">
+                                                <span t-esc="line.name"/>
+                                            </td>
+                                            <td class="text-center" style="border:1px solid #000;">
+                                                <span t-esc="line.quantity"/>
+                                            </td>
+                                            <td class="text-end" style="border:1px solid #000;">
+                                                <span t-esc="'{:,.2f}'.format(line.price_unit)"/>
+                                            </td>
+                                            <td class="text-end" style="border:1px solid #000;">
+                                                <span t-esc="'{:,.2f}'.format(line.price_subtotal)"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+
                         <div style="page-break-inside: avoid;">
                             <table class="table table-sm mt-3"
                                    style="width: 40%; margin-left: auto; border:1px solid #000;">
@@ -144,7 +204,7 @@
                                         <strong>Total Amount</strong>
                                     </td>
                                     <td class="text-right" style="border:1px solid #000;">
-                                        <span t-esc="'%.2f' % total_amount"/>
+                                        <span t-esc="'{:,.2f}'.format(total_amount)"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -152,7 +212,7 @@
                                         <strong>Amount Paid</strong>
                                     </td>
                                     <td class="text-right" style="border:1px solid #000;">
-                                        <span t-esc="'%.2f' % amount_paid"/>
+                                        <span t-esc="'{:,.2f}'.format(amount_paid)"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -160,14 +220,14 @@
                                         <strong>Amount Left</strong>
                                     </td>
                                     <td class="text-right" style="border:1px solid #000;">
-                                        <span t-esc="'%.2f' % (total_amount - amount_paid)"/>
+                                        <span t-esc="'{:,.2f}'.format(total_amount - amount_paid)"/>
                                     </td>
                                 </tr>
                             </table>
                         </div>
 
                         <!-- Accountant & Incharge Signatures -->
-                        <div class="row" style="margin-top:40px; font-size:16px;">
+                        <div class="row" style="margin-top:40px; font-size:16px; page-break-inside: avoid;">
 
                             <!-- Accountant -->
                             <div class="col-6" style="text-align:center;">

@@ -1,4 +1,6 @@
 from odoo import models, fields
+import pytz
+import datetime
 
 class DischargeSlipWizard(models.TransientModel):
     _name = 'discharge.slip.wizard'
@@ -34,3 +36,11 @@ class DischargeSlipWizard(models.TransientModel):
             return dict(field._description_selection(record.env)).get(value, value)
 
         return value
+
+    def _get_print_datetime(self):
+        """Returns current datetime localized to the logged-in user's timezone."""
+        user_tz = self.env.user.tz or 'UTC'
+        tz = pytz.timezone(user_tz)
+        utc_now = pytz.utc.localize(datetime.datetime.utcnow())
+        local_now = utc_now.astimezone(tz)
+        return local_now
