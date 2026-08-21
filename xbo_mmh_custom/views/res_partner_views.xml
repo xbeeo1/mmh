@@ -25,8 +25,8 @@
                 <field name="cnic_duplicate_confirmed" string="Allow Duplicate CNIC"/>
                 <field name="father_name"/>
                 <field name="patient_type_id" required="1"/>
-                <field name="department_id"/>
-                <field name="treatment_type_id" required="1"/>
+<!--                <field name="department_id"/>-->
+<!--                <field name="treatment_type_id" required="1"/>-->
                 <field name="primary_care_physician_id"/>
                 <field name="mr_number" invisible="1"/>
             </xpath>

@@ -49,25 +49,25 @@ class MedicalPrescriptionOrderInherit(models.Model):
 
 
 
-    @api.onchange('doctor_id')
-    def _onchange_doctor_id(self):
-
-        if self.doctor_id:
-            rate_id = self.env['treatment.rate.line'].search(
-                [('doctor_id', '=', self.doctor_id.partner_id.id),
-                 ('treatment_type_id', '=', self.patient_id.treatment_type_id.id)], limit=1)
-
-            # doctor_treatment_type = self.doctor_id.partner_id.treatment_type_id.id
-            #
-            # if doctor_treatment_type:
-            #
-            #     for tl in self.doctor_id.partner_id.department_id.treatment_rate_line:
-            #
-            #         if tl.treatment_type_id.id == self.patient_id.patient_id.treatment_type_id.id:
-            #             # print('Patient : ', self.patient_id.patient_id.name, 'Patient treatment type : ', self.patient_id.patient_id.treatment_type_id.name)
-            #             # print('Doctor Department : ', self.doctor_id.partner_id.department_id.name, 'Doctor : ', self.doctor_id.partner_id.name, 'Patient treatment type : ', self.patient_id.patient_id.treatment_type_id.name, 'Treatment fees : ', tl.treatment_fees)
-            #             self.treatment_fees = tl.treatment_fees
-            self.treatment_fees = rate_id.treatment_fees
+    # @api.onchange('doctor_id')
+    # def _onchange_doctor_id(self):
+    #
+    #     if self.doctor_id:
+    #         rate_id = self.env['treatment.rate.line'].search(
+    #             [('doctor_id', '=', self.doctor_id.partner_id.id),
+    #              ('treatment_type_id', '=', self.patient_id.treatment_type_id.id)], limit=1)
+    #
+    #         # doctor_treatment_type = self.doctor_id.partner_id.treatment_type_id.id
+    #         #
+    #         # if doctor_treatment_type:
+    #         #
+    #         #     for tl in self.doctor_id.partner_id.department_id.treatment_rate_line:
+    #         #
+    #         #         if tl.treatment_type_id.id == self.patient_id.patient_id.treatment_type_id.id:
+    #         #             # print('Patient : ', self.patient_id.patient_id.name, 'Patient treatment type : ', self.patient_id.patient_id.treatment_type_id.name)
+    #         #             # print('Doctor Department : ', self.doctor_id.partner_id.department_id.name, 'Doctor : ', self.doctor_id.partner_id.name, 'Patient treatment type : ', self.patient_id.patient_id.treatment_type_id.name, 'Treatment fees : ', tl.treatment_fees)
+    #         #             self.treatment_fees = tl.treatment_fees
+    #         self.treatment_fees = rate_id.treatment_fees
 
     def action_create_prescription_invoice(self):
         checkup_product = self.env['product.product'].search(
@@ -91,6 +91,7 @@ class MedicalPrescriptionOrderInherit(models.Model):
             'partner_id': self.patient_id.patient_id.id,
             'doctor_id': self.doctor_id.partner_id.id,
             'department_id': self.department_id.id,
+            'mr_number': self.patient_id.name,
             'patient_type_id': self.patient_id.patient_id.patient_type_id.id,
             'invoice_line_ids': move_lines,
         })

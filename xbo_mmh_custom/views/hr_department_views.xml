@@ -13,7 +13,7 @@
                             <list string="" editable="bottom">
                                 <field name="department_id" column_invisible="True"/>
                                 <field name="doctor_id" domain="[('is_doctor', '=', True)]"/>
-                                <field name="treatment_type_id"/>
+<!--                                <field name="treatment_type_id"/>-->
                                 <field name="treatment_fees"/>
                             </list>
                         </field>

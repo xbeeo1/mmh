@@ -19,7 +19,7 @@ class MedicalPatientInherit(models.Model):
     patient_cnic = fields.Char(string="CNIC", related='patient_id.patient_cnic',store=True)
     village_id = fields.Many2one("patient.village",related='patient_id.village_id',store=True, string="Village")
     medical_patient_type_id = fields.Many2one("patient.type",related='patient_id.patient_type_id',store=True, string="Patient Type")
-    department_id = fields.Many2one("hr.department", string="Department")
+    department_id = fields.Many2one("hr.department", string="Department",required=True)
 
     treatment_fees = fields.Float(string="Treatment Fees", compute='_compute_doctor_treatment_fees', store=True, readonly=False)
 
@@ -85,13 +85,14 @@ class MedicalPatientInherit(models.Model):
     def _onchange_primary_care_physician(self):
         if self.primary_care_physician_id:
             self.patient_id.primary_care_physician_id = self.primary_care_physician_id.id
-            self.department_id=self.primary_care_physician_id.partner_id.department_id.id
+            # self.department_id=self.primary_care_physician_id.partner_id.department_id.id
 
     @api.depends('department_id', 'primary_care_physician_id')
     def _compute_doctor_treatment_fees(self):
         for rec in self:
+            department_id = self.env['hr.department'].search([('id','=',rec.department_id.id)], limit=1)
             rate_id = self.env['treatment.rate.line'].search([('doctor_id', '=', rec.primary_care_physician_id.partner_id.id),
-                                                              ('treatment_type_id', '=', rec.treatment_type_id.id)], limit=1)
+                                                              ('department_id', '=', rec.department_id.id)], limit=1)
             print('rate_id', rate_id)
             rec.treatment_fees = rate_id.treatment_fees
 
@@ -182,6 +183,7 @@ class MedicalPatientInherit(models.Model):
                 'default_patient_id': patient.id,
                 'default_doctor_id': patient.primary_care_physician_id.id,
                 'default_patient_id_name': patient.name,
+                'default_treatment_fees' : patient.treatment_fees,
             },
         }
 

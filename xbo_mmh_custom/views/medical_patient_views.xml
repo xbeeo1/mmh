@@ -55,7 +55,7 @@
 
             <xpath expr="//field[@name='name']" position="after">
                 <field name="medical_patient_type_id"/>
-                <field name="treatment_type_id"/>
+<!--                <field name="treatment_type_id"/>-->
             </xpath>
 
                 <xpath expr="//label[@for='partner_address_id']" position="replace">
