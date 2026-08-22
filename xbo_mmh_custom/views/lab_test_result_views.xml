@@ -8,6 +8,7 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='date_analysis']" position="after">
                 <field name="amount_invoice" sum="Total"/>
+                <field name="state"/>
             </xpath>
             <xpath expr="//field[@name='patient_id']" position="after">
                 <field name="patient_type_id" invisible="0"/>

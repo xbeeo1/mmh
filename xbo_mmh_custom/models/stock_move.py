@@ -25,6 +25,8 @@ class StockMOveInherit(models.Model):
     @api.constrains('expiration_date', 'bypass_expiry_validation')
     def _check_expiration_date_gap(self):
         for move in self:
+            if not move.picking_id or move.picking_id.picking_type_id.code != 'incoming':
+                continue
             if move.expiration_date and move.picking_id.scheduled_date:
                 if move.expiration_date != move.picking_id.scheduled_date:
                     if move.expiration_date < move.picking_id.scheduled_date + relativedelta(months=6):

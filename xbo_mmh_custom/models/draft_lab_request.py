@@ -20,6 +20,7 @@ class MedicalPatientLabTest(models.Model):
     partner_lab_id = fields.Many2one(comodel_name='partner.lab', string="Partner Lab")
     invoice_count = fields.Integer(string="Journal Entries", compute='_invoice_total')
     amount_invoice = fields.Float(string="Amount", compute='_invoice_total', group_operator="sum", store=True)
+    department_id = fields.Many2one("hr.department", string="Department",required=True)
 
     @api.depends('request', 'patient_id')
     def _invoice_total(self):

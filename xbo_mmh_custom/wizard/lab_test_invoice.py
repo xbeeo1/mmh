@@ -36,7 +36,7 @@ class medical_lab_test_invoice(models.TransientModel):
                     'journal_id': sale_journals and sale_journals[0].id or False,
                     'partner_id': lab_req.patient_id.patient_id.id or False,
                     'partner_shipping_id': lab_req.patient_id.patient_id.id,
-                    'department_id': lab_req.doctor_id.partner_id.department_id.id or False,
+                    'department_id': lab_req.department_id.id or False,
                     'patient_type_id': lab_req.patient_id.medical_patient_type_id.id or False,
                     'doctor_id': lab_req.doctor_id.partner_id.id or False,
                     'mr_number': lab_req.patient_id.name,

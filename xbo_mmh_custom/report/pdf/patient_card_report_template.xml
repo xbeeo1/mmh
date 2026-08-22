@@ -73,7 +73,7 @@
                                 <b>Department:</b>
                                 <t t-if="o.primary_care_physician_id.partner_id.department_id">
                                     <span style="font-size:16px;"
-                                          t-field='o.primary_care_physician_id.partner_id.department_id.name'/>
+                                          t-field='o.department_id.name'/>
                                 </t>
                             </span>
                             <!-- Assuming token_no is a variable passed in context -->
@@ -150,7 +150,7 @@
                                 </td>
                             </tr>
                         </table>
-                        <div style="font-size:16px;">
+                        <div style="font-size:16px; margin-top:50px;">
                             <b>Symptoms:</b>
                             <span style="border-bottom: 1px solid black; width: 59%; display: inline-block;"></span>
                             <span style="padding-left: 10px;">
