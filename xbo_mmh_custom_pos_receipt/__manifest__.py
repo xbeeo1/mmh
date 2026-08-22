@@ -17,6 +17,7 @@
     "depends": ['base', 'point_of_sale','xbo_mmh_custom'],
 
     "data": [
+        'views/pos_order_views.xml',
         'views/res_config_setting_view.xml'
     ],
 

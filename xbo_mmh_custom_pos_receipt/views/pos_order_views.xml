@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_pos_order_tree_inherit" model="ir.ui.view">
+        <field name="name">pos.order.form.inherit</field>
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_order_tree"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="mr_number"/>
+                <field name="order_type"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="view_pos_pos_form_inherit" model="ir.ui.view">
+        <field name="name">pos.order.form.inherit</field>
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="mr_number"/>
+                <field name="order_type"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="view_pos_order_search_inherit_group_by" model="ir.ui.view">
+        <field name="name">pos.order.search.view.inherit.group.by</field>
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_order_filter"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//group" position="inside">
+                <filter
+                        string="MR Number"
+                        name="group_by_mr_number"
+                        context="{'group_by': 'mr_number'}"
+                />
+
+                <filter
+                        string="Medicine Type"
+                        name="group_by_order_type"
+                        context="{'group_by': 'order_type'}"
+                />
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

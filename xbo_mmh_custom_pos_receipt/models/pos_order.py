@@ -1,7 +1,28 @@
 # -*- coding: utf-8 -*-
 
-from odoo import api, models, _
+from odoo import api, models,fields ,_
 from odoo.exceptions import UserError
+
+
+
+
+class PosOrder(models.Model):
+    _inherit = "pos.order"
+
+    mr_number = fields.Char(string="MR Number")
+    order_type = fields.Char(string="Medicine Type")
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get("partner_id"):
+                partner = self.env["res.partner"].browse(vals["partner_id"])
+                vals["mr_number"] = partner.mr_number or False
+
+        print("VALS LIST:", vals_list)
+
+        return super().create(vals_list)
+
 
 
 class PosOrderLine(models.Model):
