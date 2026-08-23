@@ -32,5 +32,5 @@ class SaleSummaryReport(models.TransientModel):
             'sale_purchase': self.sale_purchase,
             'report_type': self.report_type,
         }
-        return self.env.ref('xbo_mmh_custom.pos_cashier_xlsx_report').report_action(self.id)
+        return self.env.ref('xbo_mmh_custom.action_xlsx_sale_summary_report').report_action(self.id)
 

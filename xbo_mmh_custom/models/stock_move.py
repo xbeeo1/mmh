@@ -35,7 +35,6 @@ class StockMOveInherit(models.Model):
                                 "Expiration Date must be at least 6 months after Scheduled Date. "
                                 "Check 'Bypass Expiry Validation' to save anyway."
                             ))
-
     """COMPUTE SHELF LIFE"""
 
     @api.depends('mrp_date', 'shelf_life', 'move_line_ids.expiration_date')

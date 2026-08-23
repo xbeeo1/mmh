@@ -5,4 +5,4 @@ from . import lab_test_invoice
 from . import medical_lab_test_create_wizard
 from . import bulk_create_invoice
 from . import account_payment_register_wizard
-from . import discharge_slip_wizard
+from . import fund_transfer_wizard
