@@ -1,0 +1,147 @@
+<odoo>
+    <record id="paperformat_current_balance" model="report.paperformat">
+        <field name="name">Current Balance Report</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">3</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+        <field name="disable_shrinking" eval="True"/>
+    </record>
+
+    <record id="action_customer_balance_report" model="ir.actions.report">
+        <field name="name">Customer Current Balance Report</field>
+        <field name="model">customer.balance.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">xbo_mmh_report.customer_balance_report_template</field>
+        <field name="print_report_name">'Customer Current Balance Report'</field>
+        <field name="paperformat_id" ref="paperformat_current_balance"/>
+    </record>
+
+    <record id="action_vendor_balance_report" model="ir.actions.report">
+        <field name="name">Vendor Current Balance Report</field>
+        <field name="model">vendor.balance.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">xbo_mmh_report.vendor_balance_report_template</field>
+        <field name="print_report_name">'Vendor Current Balance Report'</field>
+        <field name="paperformat_id" ref="paperformat_current_balance"/>
+    </record>
+
+    <template id="customer_balance_report_template">
+        <t t-call="web.html_container">
+            <t t-call="xbo_mmh_report.custom_patient_external_layout">
+                <div class="page" style="font-size:11px; padding-top:220px;">
+                    <div style="text-align:center; font-size:13px; font-weight:bold; margin-bottom:2px;">
+                        Current Balance Report
+                    </div>
+                    <div style="text-align:center; font-size:11px; color:#555; margin-bottom:6px;">
+                        From: <span t-esc="date_from"/>
+                        To: <span t-esc="date_to"/>
+                    </div>
+
+                    <table style="width:100%; border-collapse:collapse; font-size:10px;">
+                        <thead style="display: table-header-group;">
+                            <tr style="background-color:#2E5C99; color:#ffffff;">
+                                <th style="border:1px solid #999; padding:4px;">Type</th>
+                                <th style="border:1px solid #999; padding:4px;">Customer Name</th>
+                                <th style="border:1px solid #999; padding:4px;">Address</th>
+                                <th style="border:1px solid #999; padding:4px;">PhoneNo</th>
+                                <th style="border:1px solid #999; padding:4px; text-align:right;">Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="total_balance" t-value="0"/>
+                            <tr t-foreach="lines" t-as="line">
+                                <td style="border:1px solid #ccc; padding:4px;">
+                                    <span t-esc="line['type']"/>
+                                </td>
+                                <td style="border:1px solid #ccc; padding:4px;">
+                                    <span t-esc="line['name']"/>
+                                </td>
+                                <td style="border:1px solid #ccc; padding:4px;">
+                                    <span t-esc="line['address']"/>
+                                </td>
+                                <td style="border:1px solid #ccc; padding:4px;">
+                                    <span t-esc="line['phone']"/>
+                                </td>
+                                <td style="border:1px solid #ccc; padding:4px; text-align:right;">
+                                    <span t-esc="'{:,.2f}'.format(line['balance'])"/>
+                                </td>
+                                <t t-set="total_balance" t-value="total_balance + line['balance']"/>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr style="background-color:#dbe5f1; font-weight:bold;">
+                                <td colspan="4" style="border:1px solid #999; padding:4px; text-align:right;">Total</td>
+                                <td style="border:1px solid #999; padding:4px; text-align:right;">
+                                    <span t-esc="'{:,.2f}'.format(total_balance)"/>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <template id="vendor_balance_report_template">
+        <t t-call="web.html_container">
+            <t t-call="xbo_mmh_report.custom_patient_external_layout">
+                <div class="page" style="font-size:11px; padding-top:220px;">
+                    <div style="text-align:center; font-size:13px; font-weight:bold; margin-bottom:2px;">
+                        Current Balance Report
+                    </div>
+                    <div style="text-align:center; font-size:11px; color:#555; margin-bottom:6px;">
+                        From: <span t-esc="date_from"/>
+                        To: <span t-esc="date_to"/>
+                    </div>
+
+                    <table style="width:100%; border-collapse:collapse; font-size:10px;">
+                        <thead style="display: table-header-group;">
+                            <tr style="background-color:#2E5C99; color:#ffffff;">
+                                <th style="border:1px solid #999; padding:4px;">Type</th>
+                                <th style="border:1px solid #999; padding:4px;">Vendor Name</th>
+                                <th style="border:1px solid #999; padding:4px;">Address</th>
+                                <th style="border:1px solid #999; padding:4px;">PhoneNo</th>
+                                <th style="border:1px solid #999; padding:4px; text-align:right;">Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="total_balance" t-value="0"/>
+                            <tr t-foreach="lines" t-as="line">
+                                <td style="border:1px solid #ccc; padding:4px;">
+                                    <span t-esc="line['type']"/>
+                                </td>
+                                <td style="border:1px solid #ccc; padding:4px;">
+                                    <span t-esc="line['name']"/>
+                                </td>
+                                <td style="border:1px solid #ccc; padding:4px;">
+                                    <span t-esc="line['address']"/>
+                                </td>
+                                <td style="border:1px solid #ccc; padding:4px;">
+                                    <span t-esc="line['phone']"/>
+                                </td>
+                                <td style="border:1px solid #ccc; padding:4px; text-align:right;">
+                                    <span t-esc="'{:,.2f}'.format(line['balance'])"/>
+                                </td>
+                                <t t-set="total_balance" t-value="total_balance + line['balance']"/>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr style="background-color:#dbe5f1; font-weight:bold;">
+                                <td colspan="4" style="border:1px solid #999; padding:4px; text-align:right;">Total</td>
+                                <td style="border:1px solid #999; padding:4px; text-align:right;">
+                                    <span t-esc="'{:,.2f}'.format(total_balance)"/>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

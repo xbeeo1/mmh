@@ -1,0 +1,28 @@
+<odoo>
+    <record id="view_vendor_balance_wizard_form" model="ir.ui.view">
+        <field name="name">vendor.balance.wizard.form</field>
+        <field name="model">vendor.balance.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="vendor_id"/>
+                </group>
+                <footer>
+                    <button name="action_print_report" string="Print" type="object" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_vendor_balance_wizard" model="ir.actions.act_window">
+        <field name="name">Current Balance Report - Vendor</field>
+        <field name="res_model">vendor.balance.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <menuitem id="menu_vendor_balance_report" name="Current Balance Report - Vendor"
+              parent="menu_current_balance_report_root" action="action_vendor_balance_wizard"/>
+</odoo>

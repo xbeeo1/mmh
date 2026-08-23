@@ -1,0 +1,49 @@
+<odoo>
+
+    <data>
+
+        <record id="sale_summary_wizard_form_view" model="ir.ui.view">
+            <field name="name">sale.summary.report.wizard</field>
+            <field name="model">sale.summary.report</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="date_from"/>
+                                <field name="report_type"/>
+
+                            </group>
+                            <group>
+                                <field name="date_to"/>
+                                <field name="sale_purchase" invisible="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string="Print Excel Report" name="action_print_sale_summary_report_xlsx" type="object"
+                                class="oe_highlight" data-hotkey="q"/>
+                        <button string="Print Pdf Report" name="action_print_sale_summary_report" type="object"
+                                class="oe_highlight" data-hotkey="q"/>
+                        <button string="Cancel" class="btn btn-secondary" special="cancel" data-hotkey="x"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="sale_summary_report_window_act" model="ir.actions.act_window">
+            <field name="name">Sale Summary Report</field>
+            <field name="res_model">sale.summary.report</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+
+        <menuitem id="menu_sale_summary_reporting"
+                  name="Sale Summary Report"
+                  action="sale_summary_report_window_act"
+                  parent="account.account_reports_management_menu"
+                  sequence="12"/>
+
+    </data>
+</odoo>

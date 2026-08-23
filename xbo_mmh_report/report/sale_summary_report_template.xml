@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--EMPLOYEE PAYSLIP REPORT TEMPLATE -->
+        <template id="sale_summary_template">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <!--REPORT TITLE -->
+                        <center>
+                            <b>
+                                <h3>Report Sale
+                                    <t t-if="report_type">
+                                        <span t-esc="report_type"/>
+                                    </t>
+                                </h3>
+                            </b>
+                        </center>
+
+                        <!--REPORT FILTRATION VALUES -->
+                        <div style="width:100%">
+                            <div style="width:75%; float:left">
+                                <b>Date From : </b><span t-esc="date_from"/>
+                            </div>
+                            <div style="width:25%; float:left">
+                                <b>Date To : </b><span t-esc="date_to"/>
+                            </div>
+                        </div>
+                        <br/>
+
+                        <t t-if="report_type == 'Summary'">
+                            <table class="table table-condensed o_main_table table-sm table-bordered mt-5" style="margin-top:20px">
+                                <thead>
+                                    <tr>
+                                        <th style="width:55%">
+                                            <b>Department</b>
+                                        </th>
+                                        <th style="width:15%">
+                                            <b>Tax Exclude</b>
+                                        </th>
+                                        <th style="width:15%">
+                                            <b>Total</b>
+                                        </th>
+                                        <th style="width:15%">
+                                            <b>Amount Due</b>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="total_untaxed_amount" t-value="0"/>
+                                    <t t-set="total_amount" t-value="0"/>
+                                    <t t-set="total_amount_due" t-value="0"/>
+
+                                    <tr t-foreach="summary_report_data" t-as="line">
+                                        <td style="width:55%">
+                                            <span t-esc="line['department_id']"/>
+                                        </td>
+                                        <td style="width:15%">
+                                            <span t-esc="line['untaxed_amount']"/>
+                                            <t t-set="total_untaxed_amount" t-value="total_untaxed_amount + line['untaxed_amount']"/>
+                                        </td>
+                                        <td style="width:15%">
+                                            <span t-esc="line['total']"/>
+                                            <t t-set="total_amount" t-value="total_amount + line['total']"/>
+                                        </td>
+                                        <td style="width:15%">
+                                            <span t-esc="line['amount_due']"/>
+                                            <t t-set="total_amount_due" t-value="total_amount_due + line['amount_due']"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                                <thead>
+                                    <tr>
+                                        <th style="width:55%" colspan="1">
+                                            <b>Total</b>
+                                        </th>
+                                        <th style="width:15%">
+                                            <b><span t-esc="total_untaxed_amount"/></b>
+                                        </th>
+                                        <th style="width:15%">
+                                            <b><span t-esc="round(total_amount, 1)"/></b>
+                                        </th>
+                                        <th style="width:15%">
+                                            <b><b><span t-esc="total_amount_due"/></b></b>
+                                        </th>
+                                    </tr>
+                                </thead>
+
+
+                            </table>
+                        </t>
+
+
+
+                        <t t-else="">
+
+                            <table class="table table-condensed o_main_table table-sm table-bordered mt-5" style="margin-top:20px">
+                                <tbody>
+                                    <t t-set="total_qty" t-value="0"/>
+                                    <t t-set="total_amount" t-value="0"/>
+                                    <t t-foreach="invoices" t-as="inv">
+
+                                        <!-- LOOP ON INVOICE DETAILS -->
+                                        <tr style="border: 2px solid black">
+                                            <td style="width:35%; border: 1px solid black; color:red">
+                                                <b><span t-field="inv.name"/></b>
+                                            </td>
+                                            <td style="width:10%; border: 1px solid black">
+                                                <b><span t-field="inv.invoice_date"/></b>
+                                            </td>
+                                            <td style="width:20%; border: 1px solid black">
+                                                <b><span t-field="inv.department_id.name"/></b>
+                                            </td>
+                                            <td style="width:20%; border: 1px solid black">
+                                                <b><span t-field="inv.partner_id.name"/></b>
+                                            </td>
+                                            <td style="width:15%; border: 1px solid black">
+                                                <b><span t-field="inv.amount_total_in_currency_signed"/></b>
+                                            </td>
+                                        </tr>
+
+<!--                                        <tr style="border: 2px solid black">-->
+<!--                                            <td style="width:40%; border: 1px solid black">-->
+<!--                                                <b>Product</b>-->
+<!--                                            </td>-->
+<!--                                            <td style="width:10%; border: 1px solid black">-->
+<!--                                                <b>Quantity</b>-->
+<!--                                            </td>-->
+<!--                                            <td style="width:10%; border: 1px solid black">-->
+<!--                                                <b>Unit Price</b>-->
+<!--                                            </td>-->
+<!--                                            <td style="width:20%; border: 1px solid black">-->
+<!--                                                <b>Discount</b>-->
+<!--                                            </td>-->
+<!--                                            <td style="width:20%; border: 1px solid black">-->
+<!--                                                <b>Total</b>-->
+<!--                                            </td>-->
+<!--                                        </tr>-->
+
+                                        <!-- LOOP ON INVOICE PRODUCT DETAILS -->
+                                        <tr t-foreach="inv.invoice_line_ids" t-as="line">
+
+                                            <td style="width:35%" colspan="1">
+                                                <span t-field="line.product_id.name"/>
+                                            </td>
+                                            <td style="width:10%">
+                                                <span t-field="line.quantity"/>
+                                                <t t-set="total_qty" t-value="total_qty + line.quantity"/>
+                                            </td>
+                                            <td style="width:20%">
+                                                <span t-field="line.price_unit"/>
+                                            </td>
+                                            <td style="width:20">
+                                                <span t-field="line.discount"/>
+                                            </td>
+                                            <td style="width:15%">
+                                                <span t-field="line.price_total"/>
+                                                <t t-set="total_amount" t-value="total_amount + line.price_total"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+
+                                    <!--TOTALS-->
+                                    <tr style="border: 2px solid black">
+                                        <td style="width:40%; border: 1px solid black">
+                                            <b>Total</b>
+                                        </td>
+                                        <td style="width:10%; border: 1px solid black" colspan="2">
+                                            <b><span t-esc="total_qty"/></b>
+                                        </td>
+                                        <td style="width:20%; border: 1px solid black" colspan="2" class="text-end">
+                                            <b><span t-esc="round(total_amount, 1)"/></b>
+                                        </td>
+                                    </tr>
+
+
+                                </tbody>
+
+                            </table>
+
+
+                        </t>
+
+                        <!--END TABLE FOR FORM MULTI LINES DETAILS -->
+
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
