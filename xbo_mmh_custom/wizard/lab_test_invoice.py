@@ -49,6 +49,7 @@ class medical_lab_test_invoice(models.TransientModel):
                 }
                 print('invoice_vals____________', invoice_vals)
                 res = account_invoice_obj.create(invoice_vals)
+                res.is_lab_test = True
                 invoice_lines = []
 
                 for lab_line in lab_req.lab_test_lines:
@@ -128,6 +129,7 @@ class medical_lab_test_invoice(models.TransientModel):
                     'invoice_date': date.today(),
                 }
                 res = account_invoice_obj.create(invoice_vals)
+                res.is_lab_test = True
                 product = lab_req.test_id.service_product_id
                 invoice_line_account_id = False
                 if product.id:
@@ -174,6 +176,7 @@ class medical_lab_test_invoice(models.TransientModel):
                 }
 
                 invoice = account_invoice_obj.create(invoice_vals)
+                invoice.is_lab_test = True
 
                 invoice_lines = []
 

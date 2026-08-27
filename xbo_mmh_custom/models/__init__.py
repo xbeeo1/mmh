@@ -29,3 +29,4 @@ from . import report_sign
 from . import account_payment
 from . import result_text
 from . import medical_test_critearea_inherit
+from . import medical_inpatient_registration

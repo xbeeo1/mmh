@@ -56,6 +56,9 @@
             <xpath expr="//header" position="inside">
                 <field name="state" widget="statusbar" statusbar_visible="draft,confirmed"/>
             </xpath>
+            <field name="critearea_ids" position="attributes">
+                <attribute name="readonly">state == 'confirmed'</attribute>
+            </field>
 
             <xpath expr="//field[@name='date_analysis']" position="after">
                 <field name="amount_invoice" invisible="1"/>
@@ -70,14 +73,14 @@
                 <attribute name="string">No.</attribute>
             </xpath>
 
-<!--            <xpath expr="//sheet" position="inside">-->
-<!--                <div class="oe_button_box" name="button_box">-->
-<!--                    <button name="action_view_invoices" type="object" class="oe_stat_button"-->
-<!--                            icon="fa-list">-->
-<!--                        <field name="invoice_count" widget="statinfo" string="Invoice"/>-->
-<!--                    </button>-->
-<!--                </div>-->
-<!--            </xpath>-->
+            <!--            <xpath expr="//sheet" position="inside">-->
+            <!--                <div class="oe_button_box" name="button_box">-->
+            <!--                    <button name="action_view_invoices" type="object" class="oe_stat_button"-->
+            <!--                            icon="fa-list">-->
+            <!--                        <field name="invoice_count" widget="statinfo" string="Invoice"/>-->
+            <!--                    </button>-->
+            <!--                </div>-->
+            <!--            </xpath>-->
         </field>
     </record>
 

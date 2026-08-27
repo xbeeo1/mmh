@@ -21,6 +21,7 @@
                         <group>
                             <group>
                                 <field name="is_checkup_fees" invisible="0"/>
+                                <field name="is_doctor_share" invisible="0"/>
                                 <field name="analytic_account_id" />
                             </group>
                             <group>

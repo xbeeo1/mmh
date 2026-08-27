@@ -20,7 +20,9 @@
         <field name="inherit_id" ref="account.view_move_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='invoice_vendor_bill_id']" position="after">
+                <field name="is_lab_test" invisible="1"/>
                 <field name="partner_mobile" invisible="1"/>
+                <field name ='inpatient_registration_name' invisible="move_type != 'in_invoice'"/>
                 <field name="department_id" invisible="0" readonly="1"/>
                 <field name="patient_type_id" invisible="0" readonly="1"/>
                 <field name="mr_number" invisible="0" readonly="1"/>
@@ -60,6 +62,7 @@
                 <filter string="Doctor" name="doctor_id" domain="[]" context="{'group_by': 'doctor_id'}"/>
                 <filter string="Invoice Created By" name="employee_id" domain="[]" context="{'group_by': 'employee_id'}"/>
                 <filter string="Mobile" name="partner_mobile" domain="[]" context="{'group_by': 'partner_mobile'}"/>
+                <filter string="Lab Test" name="group_lab_test" context="{'group_by':'is_lab_test'}"/>
             </xpath>
         </field>
     </record>

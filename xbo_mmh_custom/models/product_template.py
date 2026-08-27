@@ -15,6 +15,7 @@ class ProductTemplateInheritFRM(models.Model):
     _inherit = 'product.template'
 
     is_checkup_fees = fields.Boolean(string="Is Checkup Fees", tracking=True)
+    is_doctor_share = fields.Boolean(string="Is Doctor Share", tracking=True)
 
     name = fields.Char('Name', index='trigram', required=True, translate=True, tracking=True)
     standard_price = fields.Float(

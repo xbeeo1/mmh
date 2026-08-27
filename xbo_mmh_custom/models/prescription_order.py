@@ -85,6 +85,7 @@ class MedicalPrescriptionOrderInherit(models.Model):
 
         move = self.env['account.move'].create({
             'move_type': 'out_invoice',
+            'name': self.env['ir.sequence'].next_by_code('pres_inv_seq'),
             'ref': self.name,
             'invoice_origin': self.name or '',
             'date': date.today(),

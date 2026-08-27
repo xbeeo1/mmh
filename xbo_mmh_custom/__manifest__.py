@@ -43,6 +43,7 @@
         'views/outsourced_lab_request_views.xml',
         'views/purchase_order_views.xml',
         'views/account_payment_views.xml',
+        'views/medical_inpatient_registration.xml',
         'data/ir_cron.xml',
         'views/stock_lot_views.xml',
         'views/stock_move_views.xml',

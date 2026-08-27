@@ -8,6 +8,7 @@ class ProductProductInherit(models.Model):
     _inherit = 'product.product'
 
     is_checkup_fees = fields.Boolean(string="Is Checkup Fees", related='product_tmpl_id.is_checkup_fees', store=True)
+    is_doctor_share = fields.Boolean(string="Is Doctor Share", related='product_tmpl_id.is_doctor_share', store=True)
 
     create_mrp_order = fields.Boolean(string="To Create MRP Order",related='product_tmpl_id.create_mrp_order', store=True)
     done_mrp_order = fields.Boolean(string="Done MRP Order",related='product_tmpl_id.done_mrp_order', store=True)

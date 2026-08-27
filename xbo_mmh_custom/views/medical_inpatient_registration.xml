@@ -1,0 +1,141 @@
+<odoo>
+    <record id="medical_inpatient_registration_form_view_inherit"
+            model="ir.ui.view">
+        <field name="name">medical.inpatient.registration.form.inherit</field>
+        <field name="model">medical.inpatient.registration</field>
+        <field name="inherit_id" ref="basic_hms.medical_inpatient_registration_form_view"/>
+        <field name="arch" type="xml">
+            <field name="operating_physician_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="attending_physician_id" position="attributes">
+                <attribute name="string">Doctor</attribute>
+            </field>
+            <!-- Confirm Registration -->
+            <xpath expr="//button[@name='registration_confirm']" position="attributes">
+                <attribute name="invisible">state != 'free'</attribute>
+            </xpath>
+            <!-- Cancel Registration -->
+            <xpath expr="//button[@name='registration_cancel']" position="attributes">
+                <attribute name="invisible">state not in ['free', 'confirmed', 'hospitalized']</attribute>
+            </xpath>
+            <!-- Patient Admission -->
+            <xpath expr="//button[@name='registration_admission']" position="attributes">
+                <attribute name="invisible">state != 'confirmed'</attribute>
+            </xpath>
+            <!-- Discharge Patient -->
+            <xpath expr="//button[@name='patient_discharge']" position="attributes">
+                <attribute name="invisible">state != 'hospitalized'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='state']" position="before">
+                <button name="reset_to_draft"
+                        string="Reset To Draft"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="state != 'done'"/>
+                <button name="action_pay_doctor_share"
+                        string="Pay Doctor Share"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="state != 'done'"/>
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <div class="oe_button_box" name="button_box">
+                    <button name="action_view_doctor_bills"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-money">
+                        <field name="doctor_bill_count" widget="statinfo" string="Doctor Bills"/>
+                    </button>
+                </div>
+            </xpath>
+            <!-- New buttons -->
+            <!--            <xpath expr="//field[@name='state']" position="before">-->
+            <!--                <button name="patient_discharge_slip"-->
+            <!--                        string="Patient Discharge Slip"-->
+            <!--                        type="object"-->
+            <!--                        class="oe_highlight"-->
+            <!--                        invisible="state != 'done'"/>-->
+            <!--                <button name="hospital_discharge_slip"-->
+            <!--                        string="Hospital Discharge Slip"-->
+            <!--                        type="object"-->
+            <!--                        class="oe_highlight"-->
+            <!--                        invisible="state != 'done'"/>-->
+            <!--            </xpath>-->
+
+            <!-- Insert a notebook right before the existing bed_transfers group -->
+            <xpath expr="//group[field[@name='bed_transfers_ids']]" position="before">
+                <notebook>
+                    <page string="Admission History" name="bed_transfers_page"/>
+                    <page string="Treatment History" name="treatment_history_page">
+                        <group colspan="4">
+                            <field name="treatment_history_ids" colspan="4" nolabel="1" readonly="1">
+                                <list>
+                                    <field name="date"/>
+                                    <field name="description"/>
+                                    <field name="qty"/>
+                                    <field name="unit_price"/>
+                                    <field name="disc_amt" sum="Total"/>
+                                    <field name="amount" sum="Total"/>
+                                </list>
+                            </field>
+                        </group>
+                    </page>
+                    <page string="Test History" name="test_history_page">
+                        <group colspan="4">
+                            <field name="lab_test_history_ids" colspan="4" nolabel="1" readonly="1">
+                                <list>
+                                    <field name="date"/>
+                                    <field name="description"/>
+                                    <field name="qty"/>
+                                    <field name="unit_price"/>
+                                    <field name="disc_amt" sum="Total"/>
+                                    <field name="amount" sum="Total"/>
+                                </list>
+                            </field>
+                        </group>
+                    </page>
+                    <page string="Medicine History" name="medicine_history_page">
+                        <group colspan="4">
+                            <field name="medicine_history_ids" colspan="4" nolabel="1" readonly="1">
+                                <list>
+                                    <field name="date"/>
+                                    <field name="description"/>
+                                    <field name="qty"/>
+                                    <field name="unit_price"/>
+                                    <field name="disc_amt" sum="Total"/>
+                                    <field name="amount" sum="Total"/>
+                                </list>
+                            </field>
+                        </group>
+                    </page>
+                    <page string="Care Plan" name="care_plan_page"/>
+                </notebook>
+            </xpath>
+
+            <!-- Move the original bed_transfers group into the Bed Transfers page -->
+            <xpath expr="//page[@name='bed_transfers_page']" position="inside">
+                <xpath expr="//group[field[@name='bed_transfers_ids']]" position="move"/>
+            </xpath>
+
+            <!-- Move the original Care Plan group into the Care Plan page -->
+            <xpath expr="//page[@name='care_plan_page']" position="inside">
+                <xpath expr="//group[field[@name='nursing_plan']]" position="move"/>
+            </xpath>
+
+            <!-- Remove auto label above bed_transfers_ids list -->
+            <xpath expr="//field[@name='bed_transfers_ids']" position="attributes">
+                <attribute name="nolabel">1</attribute>
+            </xpath>
+            <xpath expr="//notebook" position="after">
+                <group class="oe_subtotal_footer" colspan="2">
+                    <field name="treatment_medicine_total"/>
+                    <field name="lab_test_total"/>
+                    <field name="ward_med_total"/>
+                    <field name="doctor_total"/>
+                    <field name="grand_total" class="oe_subtotal_footer_separator"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -19,6 +19,16 @@ class AccountMoveInherit(models.Model):
 
     licence_status = fields.Selection(string="Licence Status", selection=[('active', 'Active'), ('expired', 'Expired')],
                                       related='partner_id.licence_status', store=True)
+    is_lab_test = fields.Boolean(string="Lab Test")
+    inpatient_registration_id = fields.Many2one(
+        'medical.inpatient.registration',
+        string="Inpatient Registration"
+    )
+    inpatient_registration_name = fields.Char(
+        string="InPatient Reference",
+        related='inpatient_registration_id.name',
+        store=True,
+    )
 
     """CREATE METHOD FOR BILL VALIDATION ON EXPIRED LICENCE"""
 
