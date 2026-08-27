@@ -2,6 +2,7 @@ from odoo import models, fields
 import pytz
 import datetime
 
+
 class DischargeSlipWizard(models.TransientModel):
     _name = 'discharge.slip.wizard'
     _description = 'Discharge Slip Wizard'
@@ -10,6 +11,14 @@ class DischargeSlipWizard(models.TransientModel):
     date_to = fields.Date(required=True)
     patient_id = fields.Many2one('medical.patient', required=True)
 
+    # Hospital discharge slip totals
+    treatment_medicine_total = fields.Float()
+    lab_test_total = fields.Integer()
+    ward_med_total = fields.Integer()
+    doctor_total = fields.Integer()
+    grand_total = fields.Float()
+    inpatient_registration_id = fields.Many2one('medical.inpatient.registration')
+
     def action_print_report(self):
         return self.env.ref('xbo_mmh_report.action_discharge_slip_report').report_action(self)
 
@@ -17,24 +26,18 @@ class DischargeSlipWizard(models.TransientModel):
         """Check medical.patient first, then fallback to res.partner."""
         patient = self.patient_id
         partner = self.patient_id.patient_id
-
         if field_name in patient._fields:
             record = patient
         elif field_name in partner._fields:
             record = partner
         else:
             return ''
-
         value = getattr(record, field_name, False)
-
         if not value:
             return ''
-
         field = record._fields[field_name]
-
         if field.type == 'selection':
             return dict(field._description_selection(record.env)).get(value, value)
-
         return value
 
     def _get_print_datetime(self):
@@ -44,3 +47,16 @@ class DischargeSlipWizard(models.TransientModel):
         utc_now = pytz.utc.localize(datetime.datetime.utcnow())
         local_now = utc_now.astimezone(tz)
         return local_now
+
+    def _get_inpatient_field(self, field_name):
+        """Fetch field directly from the linked inpatient registration record."""
+        registration = self.inpatient_registration_id
+        if not registration:
+            return ''
+        value = getattr(registration, field_name, False)
+        if not value:
+            return ''
+        field = registration._fields[field_name]
+        if field.type == 'selection':
+            return dict(field._description_selection(registration.env)).get(value, value)
+        return value

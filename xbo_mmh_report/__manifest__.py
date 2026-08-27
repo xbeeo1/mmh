@@ -14,7 +14,7 @@
 
     'website': 'https://xbeeo.com',
 
-    "depends": ['base','xbo_mmh_custom'],
+    "depends": ['base','xbo_mmh_custom','basic_hms'],
 
     "data": [
         'security/ir.model.access.csv',
@@ -22,10 +22,12 @@
         'report/pos_profit_loss_report_template.xml',
         'report/report_partner_ledger.xml',
         'report/current_balance_report_template.xml',
-        'report/discharge_slip_report.xml',
+        'report/patient_discharge_slip_report.xml',
         'report/lab_test_report_template.xml',
         'report/patient_card_report_template.xml',
         'report/sale_summary_report_template.xml',
+        'report/medical_inpatient_registration.xml',
+        'report/hospital_discharge_slip.xml',
         'report/report_action.xml',
         'wizards/multidays_profit_loss_wizard.xml',
         'wizards/pos_profit_loss_wizard_views.xml',

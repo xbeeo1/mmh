@@ -1,0 +1,98 @@
+<odoo>
+    <record id="medical_inpatient_registration_form_view_inherit"
+            model="ir.ui.view">
+        <field name="name">medical.inpatient.registration.form.inherit</field>
+        <field name="model">medical.inpatient.registration</field>
+        <field name="inherit_id" ref="basic_hms.medical_inpatient_registration_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="before">
+                <button name="patient_discharge_slip"
+                        string="Patient Discharge Slip"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="state != 'done'"/>
+                <button name="hospital_discharge_slip"
+                        string="Hospital Discharge Slip"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="state != 'done'"/>
+            </xpath>
+            <!--            &lt;!&ndash; Confirm Registration &ndash;&gt;-->
+            <!--            <xpath expr="//button[@name='registration_confirm']" position="attributes">-->
+            <!--                <attribute name="invisible">state != 'free'</attribute>-->
+            <!--            </xpath>-->
+            <!--            &lt;!&ndash; Cancel Registration &ndash;&gt;-->
+            <!--            <xpath expr="//button[@name='registration_cancel']" position="attributes">-->
+            <!--                <attribute name="invisible">state not in ['free', 'confirmed', 'hospitalized']</attribute>-->
+            <!--            </xpath>-->
+            <!--            &lt;!&ndash; Patient Admission &ndash;&gt;-->
+            <!--            <xpath expr="//button[@name='registration_admission']" position="attributes">-->
+            <!--                <attribute name="invisible">state != 'confirmed'</attribute>-->
+            <!--            </xpath>-->
+            <!--            &lt;!&ndash; Discharge Patient &ndash;&gt;-->
+            <!--            <xpath expr="//button[@name='patient_discharge']" position="attributes">-->
+            <!--                <attribute name="invisible">state != 'hospitalized'</attribute>-->
+            <!--            </xpath>-->
+            <!-- New buttons -->
+
+
+            <!--            &lt;!&ndash; Insert a notebook right before the existing bed_transfers group &ndash;&gt;-->
+            <!--            <xpath expr="//group[field[@name='bed_transfers_ids']]" position="before">-->
+            <!--                <notebook>-->
+            <!--                    <page string="Admission History" name="bed_transfers_page"/>-->
+            <!--                    <page string="Treatment History" name="treatment_history_page">-->
+            <!--                        <group colspan="4">-->
+            <!--                            <field name="treatment_history_ids" colspan="4" nolabel="1">-->
+            <!--                                <list>-->
+            <!--                                    <field name="date"/>-->
+            <!--                                    <field name="description"/>-->
+            <!--                                    <field name="qty"/>-->
+            <!--                                    <field name="unit_price"/>-->
+            <!--                                    <field name="amount"/>-->
+            <!--                                </list>-->
+            <!--                            </field>-->
+            <!--                        </group>-->
+            <!--                    </page>-->
+            <!--                    <page string="Medicine History" name="medicine_history_page">-->
+            <!--                        <group colspan="4">-->
+            <!--                            <field name="medicine_history_ids" colspan="4" nolabel="1">-->
+            <!--                                <list>-->
+            <!--                                    <field name="date"/>-->
+            <!--                                    <field name="description"/>-->
+            <!--                                    <field name="qty"/>-->
+            <!--                                    <field name="unit_price"/>-->
+            <!--                                    <field name="amount"/>-->
+            <!--                                </list>-->
+            <!--                            </field>-->
+            <!--                        </group>-->
+            <!--                    </page>-->
+            <!--                    <page string="Care Plan" name="care_plan_page"/>-->
+            <!--                </notebook>-->
+            <!--            </xpath>-->
+
+            <!--            &lt;!&ndash; Move the original bed_transfers group into the Bed Transfers page &ndash;&gt;-->
+            <!--            <xpath expr="//page[@name='bed_transfers_page']" position="inside">-->
+            <!--                <xpath expr="//group[field[@name='bed_transfers_ids']]" position="move"/>-->
+            <!--            </xpath>-->
+
+            <!--            &lt;!&ndash; Move the original Care Plan group into the Care Plan page &ndash;&gt;-->
+            <!--            <xpath expr="//page[@name='care_plan_page']" position="inside">-->
+            <!--                <xpath expr="//group[field[@name='nursing_plan']]" position="move"/>-->
+            <!--            </xpath>-->
+
+            <!--            &lt;!&ndash; Remove auto label above bed_transfers_ids list &ndash;&gt;-->
+            <!--            <xpath expr="//field[@name='bed_transfers_ids']" position="attributes">-->
+            <!--                <attribute name="nolabel">1</attribute>-->
+            <!--            </xpath>-->
+            <!--            <xpath expr="//notebook" position="after">-->
+            <!--                <group class="oe_subtotal_footer" colspan="2">-->
+            <!--                    <field name="treatment_medicine_total"/>-->
+            <!--                    <field name="lab_test_total"/>-->
+            <!--                    <field name="ward_med_total"/>-->
+            <!--                    <field name="doctor_total"/>-->
+            <!--                    <field name="grand_total" class="oe_subtotal_footer_separator"/>-->
+            <!--                </group>-->
+            <!--            </xpath>-->
+        </field>
+    </record>
+</odoo>

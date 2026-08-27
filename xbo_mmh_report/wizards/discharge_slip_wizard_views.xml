@@ -24,7 +24,7 @@
         <field name="target">new</field>
     </record>
 
-    <menuitem id="menu_discharge_slip" name="Discharge Slip"
-              parent="basic_hms.main_menu_hospital_management"
-              action="action_discharge_slip_wizard"/>
+<!--    <menuitem id="menu_discharge_slip" name="Discharge Slip"-->
+<!--              parent="basic_hms.main_menu_hospital_management"-->
+<!--              action="action_discharge_slip_wizard"/>-->
 </odoo>
